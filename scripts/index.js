@@ -66,7 +66,7 @@ function validate_field(field) {
 }  
 
 //Move on with Auth
-auth.createUserWithEmailAndPassword(email, pasword)
+auth.createUserWithEmailAndPassword(email, password)
 .then(function(){
 
     var user = auth.currentUser
