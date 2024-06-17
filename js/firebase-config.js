@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -20,4 +20,4 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 console.log("Firebase Initialized");
 
-export { auth, db, getAuth, createUserWithEmailAndPassword };
+export { auth, db, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword };

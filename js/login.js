@@ -1,5 +1,5 @@
 // login.js
-import { auth } from './firebase-config.js';
+import { auth, signInWithEmailAndPassword} from './firebase-config.js';
 
 auth.signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
