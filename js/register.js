@@ -1,33 +1,30 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
+import { auth, getAuth, createUserWithEmailAndPassword } from "./firebase-config.js";
 
 document.getElementById('registerForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the default form submission behavior
 
-    const auth = getAuth();
-    createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-    // Signed up 
-        const user = userCredential.user;
-    // ...
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-    // ..
-    });
-
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    
+    const auth = getAuth();
 
-    auth.createUserWithEmailAndPassword(email, password)
-        .then((user) => {
-            // Handle successful registration
+    if (email.trim() === '' || password.length < 6) {
+        alert("Please enter a valid email and a password with at least 6 characters.");
+        return;
+    }
+    
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+        // Signed up 
+            const user = userCredential.user;
             alert('Registration successful!');
-            window.location.href = '/login.html'; // Redirect to login page after registration
+            window.location.href = '/shhs-app/login.html';
+        // ...
         })
         .catch((error) => {
-            // Handle errors during registration
+            const errorCode = error.code;
+            const errorMessage = error.message;
             alert("Error: " + error.message);
+        // ..
         });
 });
