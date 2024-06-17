@@ -18,7 +18,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
         // Signed up 
             const user = userCredential.user;
             alert('Registration successful!');
-            window.location.href = '/SpiritApp/login.html';
+            window.location.href = '/login.html';
         // ...
         })
         .catch((error) => {
