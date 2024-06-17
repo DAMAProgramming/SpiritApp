@@ -4,16 +4,16 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 document.getElementById('registerForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the default form submission behavior
 
-const auth = getAuth();
-createUserWithEmailAndPassword(auth, email, password)
+    const auth = getAuth();
+    createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
     // Signed up 
-    const user = userCredential.user;
+        const user = userCredential.user;
     // ...
     })
     .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
+        const errorCode = error.code;
+        const errorMessage = error.message;
     // ..
     });
 
@@ -21,7 +21,7 @@ createUserWithEmailAndPassword(auth, email, password)
     const password = document.getElementById('password').value;
 
     auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
+        .then((user) => {
             // Handle successful registration
             alert('Registration successful!');
             window.location.href = '/login.html'; // Redirect to login page after registration
