@@ -1,13 +1,13 @@
 // login.js
 import { auth } from './firebase-config.js';
 
-auth.signInWithEmailAndPassword(email, password)
+auth.signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // User is logged in
-    console.log("Login successful!");
+    alert("Login successful!");
 
     // Redirect to another page
-    window.location.href = '/profile.html';  // Redirect to profile or dashboard
+    window.location.href = '/SpiritApp/main.html';  // Redirect to profile or dashboard
   })
   .catch((error) => {
     var errorCode = error.code;
