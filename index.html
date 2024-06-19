@@ -1,35 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
-    
+<html lang = "en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content = "width = device-width, initial-scale = 1.0">
-        <meta http-equiv="X-UA-Compatible" content = "IE=edge">
-        <title>Spirit App Login</title>
-        <link rel="icon" href = "favicon.ico" type = "image/x-icon">
-        <link rel="stylesheet" href="styles/register.css">
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
+        <title>Official SHHS Spirit Website</title>
+        <link rel = "stylesheet" href = "styles/main.css">
+        <link rel = "icon" href = "favicon.ico" type = "image/x-icon">
+        <link rel="stylesheet" href="favicon.ico"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@700&display=swap" rel="stylesheet">
     </head>
     <body>
-        
-        <div class="wrapper">
-            <form id="registerForm" action="">
-                <h1>     Registration</h1>
-                <div class="input-box">
-                    <input type="email" id="email" placeholder="Email" required>
-                    <i class='bx bxs-user'></i>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="password" placeholder="Password" required>
-                    <i class='bx bxs-lock-alt'></i>
-                </div>
-                <button type="submit" class="btn">Register</button>
 
-                
-            </form>
+        <nav class="navbar">
+            <div class="navbar__container">
+                <a href="/main.html" id="navbar__logo"><b>Spirit App</b>
+                </a>
+                <div class="navbar__toggle" id="mobile-menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <ul class="navbar__menu">
+                    <li class="navbar__item">
+                        <a href="./main.html" class="navbar__links">Home</a>
+                    </li>
+                    <li class="navbar__item">
+                        <a href="./main.html" class="navbar__links">Points</a>
+                    </li>
+                    <li class="navbar__item">
+                        <a href="./main.html" class="navbar__links">News</a>
+                    </li>
+                    <li class="navbar__btn">
+                        <a href="./login.html" class="button">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="main">
+            <div class="main__container">
+                <div class="main__content">
+                    <h1>SWEET HOME HIGH SCHOOL</h1>
+                    <h2>See the latest news.</h2>
+                    <button class="main__btn"><a href="./main.html">See Full Timeline</a></button>
+                </div>
+            </div>
         </div>
 
+        <script src="js/mainInteract.js"></script>
+        
+        <script src = "scripts/index.js"></script>
+        <script src="js/firebase-config.js"></script>
+        <script src="js/iflogin.js"></script>
     </body>
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="js/register.js"></script>
 </html>
