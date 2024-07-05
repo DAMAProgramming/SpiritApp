@@ -20,4 +20,4 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 console.log("Firebase Initialized");
 
-export { auth, db, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword };
+export { auth, db, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, getFirestore };
