@@ -1,6 +1,6 @@
 // index.js
 import { db } from './js/firebase-config.js';
-import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { doc, onSnapshot, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM fully loaded");
@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }, (error) => {
         console.error("Error fetching spirit points:", error);
     });
+
+    // Load news
+    loadNews();
 });
 
 function updateChart(pointsData) {
@@ -82,4 +85,35 @@ function updateChart(pointsData) {
             console.warn(`Bar container not found for ${className}`);
         }
     }
+}
+
+async function loadNews() {
+    const newsContainer = document.getElementById('news-container');
+    if (!newsContainer) return;
+
+    try {
+        const newsQuery = query(collection(db, 'news'), orderBy('date', 'desc'), limit(5));
+        const snapshot = await getDocs(newsQuery);
+        
+        newsContainer.innerHTML = '';
+        snapshot.forEach(doc => {
+            const news = doc.data();
+            const newsElement = createNewsElement(news);
+            newsContainer.appendChild(newsElement);
+        });
+    } catch (error) {
+        console.error('Error loading news:', error);
+    }
+}
+
+function createNewsElement(news) {
+    const div = document.createElement('div');
+    div.className = 'news-item';
+    div.innerHTML = `
+        <h3>${news.title}</h3>
+        <p>${news.content}</p>
+        ${news.imageUrl ? `<img src="${news.imageUrl}" alt="${news.title}" style="max-width: 100%; height: auto;">` : ''}
+        <p class="date">${news.date.toDate().toLocaleString()}</p>
+    `;
+    return div;
 }

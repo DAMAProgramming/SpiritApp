@@ -1,27 +1,6 @@
-import { db } from './firebase-config.js';
-
-// admin-dashboard.js (and other admin page JS files)
-
-import { auth } from './firebase-config.js';
-import { signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-
-document.addEventListener('DOMContentLoaded', function() {
-    const logoutBtn = document.getElementById('logout-btn');
-    
-    logoutBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        signOut(auth).then(() => {
-            // Sign-out successful.
-            console.log('User signed out');
-            window.location.href = '/login.html'; // Redirect to login page
-        }).catch((error) => {
-            // An error happened.
-            console.error('Sign out error:', error);
-        });
-    });
-});
-
-const storage = firebase.storage();
+import { db, storage } from './firebase-config.js';
+import { collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const newsForm = document.getElementById('news-form');
@@ -39,14 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             let imageUrl = null;
             if (imageFile) {
-                imageUrl = await uploadImage(imageFile);
+                const imageRef = ref(storage, `news-images/${Date.now()}-${imageFile.name}`);
+                await uploadBytes(imageRef, imageFile);
+                imageUrl = await getDownloadURL(imageRef);
             }
 
-            await db.collection('news').add({
+            await addDoc(collection(db, 'news'), {
                 title,
                 content,
                 imageUrl,
-                date: firebase.firestore.FieldValue.serverTimestamp()
+                date: new Date()
             });
 
             alert('News posted successfully!');
@@ -58,24 +39,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function uploadImage(file) {
-        const storageRef = storage.ref();
-        const fileRef = storageRef.child(`news-images/${Date.now()}-${file.name}`);
-        await fileRef.put(file);
-        return await fileRef.getDownloadURL();
-    }
-
     async function loadNews() {
         try {
-            const snapshot = await db.collection('news').orderBy('date', 'desc').limit(10).get();
+            console.log("Starting to load news");
+            const newsQuery = query(collection(db, 'news'), orderBy('date', 'desc'));
+            console.log("Query created");
+            const snapshot = await getDocs(newsQuery);
+            console.log("Snapshot received", snapshot);
             newsList.innerHTML = '';
             snapshot.forEach(doc => {
+                console.log("Processing doc:", doc.id);
                 const news = doc.data();
                 const newsElement = createNewsElement(news, doc.id);
                 newsList.appendChild(newsElement);
             });
         } catch (error) {
             console.error('Error loading news:', error);
+            console.error('Error details:', error.code, error.message);
+            alert('Error loading news. Please check the console for details.');
         }
     }
 
@@ -85,18 +66,22 @@ document.addEventListener('DOMContentLoaded', () => {
         div.innerHTML = `
             <h3>${news.title}</h3>
             <p>${news.content}</p>
-            ${news.imageUrl ? `<img src="${news.imageUrl}" alt="${news.title}">` : ''}
-            <p class="date">${news.date ? news.date.toDate().toLocaleString() : 'Date unknown'}</p>
+            ${news.imageUrl ? `<img src="${news.imageUrl}" alt="${news.title}" style="max-width: 100%; height: auto;">` : ''}
+            <p class="date">${news.date.toDate().toLocaleString()}</p>
             <button class="delete-btn" data-id="${id}">Delete</button>
         `;
-        div.querySelector('.delete-btn').addEventListener('click', () => deleteNews(id));
+        div.querySelector('.delete-btn').addEventListener('click', () => deleteNews(id, news.imageUrl));
         return div;
     }
 
-    async function deleteNews(id) {
+    async function deleteNews(id, imageUrl) {
         if (confirm('Are you sure you want to delete this news item?')) {
             try {
-                await db.collection('news').doc(id).delete();
+                await deleteDoc(doc(db, 'news', id));
+                if (imageUrl) {
+                    const imageRef = ref(storage, imageUrl);
+                    await deleteObject(imageRef);
+                }
                 alert('News deleted successfully!');
                 loadNews();
             } catch (error) {
@@ -106,4 +91,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-
