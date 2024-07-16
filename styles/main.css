@@ -254,6 +254,11 @@ body {
 /* Spirit Points Chart Styles */
 .chart-container {
     width: 100%;
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
 }
 
 .chart-container h3 {
@@ -286,8 +291,21 @@ body {
     opacity: 0.8;
 }
 
-.bar::before {
-    content: attr(data-points);
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+}
+
+.bar-label {
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.points-display {
     position: absolute;
     top: -25px;
     left: 50%;
@@ -297,15 +315,13 @@ body {
     color: var(--text-color);
 }
 
-.bar::after {
-    content: attr(data-class);
+.class-name-display {
     position: absolute;
-    bottom: -30px;
+    bottom: -25px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 12px;
     white-space: nowrap;
-    color: var(--text-color);
 }
 
 .freshman { background-color: #f0f0f0; }
@@ -423,5 +439,9 @@ button[type="submit"]:hover, .btn:hover {
     .bar::after {
         font-size: 10px;
         bottom: -25px;
+    }
+
+    .bar-container {
+        width: 40px;
     }
 }

@@ -33,22 +33,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function updateChart(pointsData) {
     console.log("Updating chart with data:", pointsData);
+
     const maxPoints = Math.max(...Object.values(pointsData));
-   
+    console.log("Max points:", maxPoints);
+
+    const classMap = {
+        "Freshmen": "freshman",
+        "Sophomores": "sophomore",
+        "Juniors": "junior",
+        "Seniors": "senior"
+    };
+
     for (const [className, points] of Object.entries(pointsData)) {
-        const bar = document.querySelector(`.bar.${className.toLowerCase()}`);
+        const cssClass = classMap[className] || className.toLowerCase();
+
+        const bar = document.querySelector(`.bar.${cssClass}`);
         if (bar) {
-            console.log(`Updating bar for ${className} with ${points} points`);
-            const percentage = (points / maxPoints) * 100;
+            const percentage = maxPoints > 0 ? (points / maxPoints) * 100 : 0;
+            console.log(`Setting height for ${className} (${cssClass}): ${percentage}%`);
+
             bar.style.height = `${percentage}%`;
+            bar.offsetHeight;  // Trigger a reflow to ensure the height is updated
             bar.setAttribute('data-points', points);
-            // Update the text display of points
-            const pointsDisplay = bar.querySelector('.points-display') || bar.nextElementSibling;
-            if (pointsDisplay) {
-                pointsDisplay.textContent = points;
+
+            // Ensure a single points display
+            let pointsDisplay = bar.querySelector('.points-display');
+            if (!pointsDisplay) {
+                pointsDisplay = document.createElement('div');
+                pointsDisplay.className = 'points-display';
+                bar.appendChild(pointsDisplay);
             }
+            pointsDisplay.textContent = points;
         } else {
-            console.log(`Bar element not found for ${className}`);
+            console.error(`Bar element not found for ${className} (tried class .${cssClass})`);
+        }
+
+        // Ensure a single label
+        const barContainer = bar.closest('.bar-container');
+        if (barContainer) {
+            let label = barContainer.querySelector('.bar-label');
+            if (!label) {
+                label = document.createElement('div');
+                label.className = 'bar-label';
+                barContainer.appendChild(label);
+            }
+            label.textContent = className;
+        } else {
+            console.warn(`Bar container not found for ${className}`);
         }
     }
 }
