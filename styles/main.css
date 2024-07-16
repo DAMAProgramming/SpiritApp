@@ -113,7 +113,7 @@ body {
 }
 
 .button:hover {
-    background: #4837ff;
+    background: #f1f52d;
     transition: all 0.3s ease;
 }
 
@@ -271,7 +271,7 @@ body {
 .chart {
     display: flex;
     justify-content: space-around;
-    align-items: flex-end;
+    align-items: stretch;
     height: 300px;
     width: 100%;
     margin-bottom: 25px;
@@ -296,6 +296,15 @@ body {
     flex-direction: column;
     align-items: center;
     width: 60px;
+}
+
+.bar-wrapper {
+    display: flex;
+    align-items: flex-end; /* Align bars at the bottom */
+    height: 100%;
+    width: 100%;
+    padding-top: 20px; /* Add padding at the top */
+    box-sizing: border-box; /* Ensure padding is included in height calculation */
 }
 
 .bar-label {
