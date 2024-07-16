@@ -11,6 +11,7 @@
   --border-color: #dee2e6;
   --navbar-bg: #f8f9fa;
   --button-text: #ffffff;
+  --bg-text-color: #f0f0f0;
 }
 
 * {
@@ -217,6 +218,26 @@ body {
         transform: translateY(-8px) rotate(-45deg);
     }
 }
+
+.background-text {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bg-word {
+    position: absolute;
+    font-size: 52px;
+    color: var(--bg-text-color);
+    opacity: 0.8;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 /* Main Content Styles */
 .main {
     background-color: var(--background-color);
