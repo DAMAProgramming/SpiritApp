@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         signOut(auth).then(() => {
             // Sign-out successful.
             alert('You have been logged out.');
-            window.location.href = '/SpiritApp/login.html';
+            window.location.href = './login.html';
         }).catch((error) => {
             // An error happened.
             console.error('Logout failed:', error);

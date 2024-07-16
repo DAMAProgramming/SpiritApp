@@ -1,5 +1,5 @@
 // Initialize Firebase (make sure firebase-config.js is loaded before this script)
-import { db } from './js/firebase-config';
+import { db } from './js/firebase-config.js';
 
 // Function to update spirit points
 function updateSpiritPoints() {

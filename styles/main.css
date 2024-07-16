@@ -1,28 +1,34 @@
-/* Font import */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+/* Refined Main CSS with Light Theme and Fixes */
 
-/* Root styles */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
 :root {
-    --font-primary: 'Poppins', sans-serif;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #1eb400;
+  --secondary-color: #0056b3;
+  --accent-color: #ffc107;
+  --border-color: #dee2e6;
+  --navbar-bg: #f8f9fa;
+  --button-text: #ffffff;
 }
 
-/* Global styles */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    font-family: var(--font-primary);
-    /* Fallback fonts in case Poppins doesn't load */
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
+/* Navbar styles remain the same */
+/* Navbar Styles */
 .navbar {
-    background: #131313;
+    background: var(--navbar-bg);
     height: 80px;
     display: flex;
     justify-content: center;
@@ -31,6 +37,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 999;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .navbar__container {
@@ -45,8 +52,8 @@ body {
 }
 
 #navbar__logo {
-    background-color: #1eb400;
-    background-image: linear-gradient(to top, #fffb08 0%, #0f0 100%);
+    background-color: var(--primary-color);
+    background-image: linear-gradient(to top, var(--primary-color) 0%, #21d4fd 100%);
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;
@@ -57,11 +64,7 @@ body {
     cursor: pointer;
     text-decoration: none;
     font-size: 2rem;
-    font-weight: 600;
-}
-
-.fa-gem {
-    margin-right: 0.5rem;
+    font-weight: bold;
 }
 
 .navbar__menu {
@@ -76,7 +79,7 @@ body {
 }
 
 .navbar__links {
-    color: #fff;
+    color: var(--text-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,21 +107,23 @@ body {
     border: none;
     outline: none;
     border-radius: 4px;
-    background: forestgreen;
-    color: white;
+    background: var(--primary-color);
+    color: var(--button-text);
+    transition: all 0.3s ease;
 }
 
 .button:hover {
-    background: yellow;
+    background: #4837ff;
     transition: all 0.3s ease;
 }
 
 .navbar__links:hover {
-    color: silver;
+    color: var(--primary-color);
     transition: all 0.3s ease;
 }
 
 @media screen and (max-width: 960px) {
+    /* Mobile menu styles */
     .navbar__container {
         display: flex;
         justify-content: space-between;
@@ -140,11 +145,10 @@ body {
         transition: all 0.5s ease;
         height: 50vh;
         z-index: -1;
-        background: #131313;
+        background: var(--navbar-bg);
     }
 
     .navbar__menu.active {
-        background: #131313;
         top: 100%;
         opacity: 1;
         transition: all 0.5s ease;
@@ -162,7 +166,7 @@ body {
         height: 3px;
         margin: 5px auto;
         transition: all 0.3s ease-in-out;
-        background: #fff;
+        background: var(--text-color);
     }
 
     .navbar__item {
@@ -213,92 +217,19 @@ body {
         transform: translateY(-8px) rotate(-45deg);
     }
 }
-
-
-
-
-.navbar_menu {
-    display: grid;
-    grid-template-columns: auto;
-    margin: 0;
-    width: 100%;
-    position: absolute;
-    top: -1000px;
-    opacity: 0;
-    transition: all 0.5s ease;
-    height: 50vh;
-    z-index: -1;
-}
-
-.navbar_menu.active {
-    background: #131313;
-    top: 100%;
-    opacity: 1;
-    transition: all 0.5s ease;
-    z-index: 99;
-    height: 50vh;
-    font-size: 1.6rem;
-}
-
-#navbar_logo {
-    padding-left: 25px;
-}
-
-.navbar_toggle .bar {
-    width: 25px;
-    height: 3px;
-    margin: 5px auto;
-    transition: all 0.3s ease-in-out;
-    background: #fff;
-}
-
-.navbar_item {
-    width: 100%;
-}
-
-.navbar_links {
-    text-align: center;
-    padding: 2rem;
-    width: 100%;
-    display: table;
-}
-
-#mobile-menu {
-    position: absolute;
-    top: 20%;
-    right: 5%;
-    transform: translate(5%, 20%);
-}
-
-
-.navbar_btn {
-    padding-bottom: 2rem;
-}
-
-.button {
-display: flex;
-justify-content: center;
-}
-
-/* Hero Section */
-
+/* Main Content Styles */
 .main {
-    background-color: #141414;
+    background-color: var(--background-color);
 }
-
-/* ... (keep existing styles for navbar, etc.) ... */
 
 .main__container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    max-width: 1200px;
     margin: 0 auto;
     min-height: 90vh;
-    background-color: #141414;
-    z-index: 1;
-    width: 100%;
-    max-width: 1300px;
     padding: 50px 20px;
 }
 
@@ -306,14 +237,15 @@ justify-content: center;
     width: 100%;
     max-width: 800px;
     margin-bottom: 40px;
-    background-color: rgba(22, 22, 22, 0.8);
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .content-section h2 {
-    color: #ffffff;
+    color: var(--text-color);
     font-size: 2rem;
     margin-bottom: 20px;
     text-align: center;
@@ -322,7 +254,13 @@ justify-content: center;
 /* Spirit Points Chart Styles */
 .chart-container {
     width: 100%;
-    padding-bottom: 30px; /* Added padding at the bottom */
+}
+
+.chart-container h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: var(--text-color);
 }
 
 .chart {
@@ -331,19 +269,19 @@ justify-content: center;
     align-items: flex-end;
     height: 300px;
     width: 100%;
-    margin-bottom: 25px; /* Added margin to push the bar titles down */
+    margin-bottom: 25px;
 }
 
 .bar {
     width: 60px;
-    background-color: #4a4a4a;
+    background-color: var(--primary-color);
     border-radius: 5px 5px 0 0;
     position: relative;
     transition: height 0.5s ease-in-out;
 }
 
 .bar:hover {
-    background-color: #5a5a5a;
+    opacity: 0.8;
 }
 
 .bar::before {
@@ -354,18 +292,18 @@ justify-content: center;
     transform: translateX(-50%);
     font-size: 14px;
     font-weight: bold;
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 .bar::after {
     content: attr(data-class);
     position: absolute;
-    bottom: -30px; /* Increased from -25px to -30px */
+    bottom: -30px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 12px;
     white-space: nowrap;
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 .freshman { background-color: #ff6b6b; }
@@ -374,60 +312,106 @@ justify-content: center;
 .senior { background-color: #f7b731; }
 
 /* News Styles */
+#news-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .news-item {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     padding: 15px;
-    margin-bottom: 15px;
 }
 
 .news-item h3 {
-    color: #ffffff;
+    color: var(--secondary-color);
     margin-bottom: 10px;
 }
 
 .news-item p {
-    color: #dddddd;
+    color: var(--text-color);
     margin-bottom: 5px;
 }
 
 .news-item small {
-    color: #aaaaaa;
+    color: #666;
     font-style: italic;
 }
 
 /* Event Styles */
+#events-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .event-item {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     padding: 15px;
-    margin-bottom: 15px;
 }
 
 .event-item h3 {
-    color: #ffffff;
+    color: var(--secondary-color);
     margin-bottom: 10px;
 }
 
 .event-item p {
-    color: #dddddd;
+    color: var(--text-color);
     margin-bottom: 5px;
 }
 
 .event-item small {
-    color: #aaaaaa;
+    color: #666;
     font-style: italic;
+}
+
+/* Form Styles */
+input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+}
+
+button[type="submit"], .btn {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+button[type="submit"]:hover, .btn:hover {
+    background-color: #178f00;
 }
 
 /* Responsive Design */
 @media screen and (max-width: 768px) {
-    .chart-container {
-        padding-bottom: 25px; /* Slightly less padding on smaller screens */
+    .main__container {
+        padding: 20px;
+    }
+
+    .content-section {
+        padding: 20px;
     }
 
     .chart {
         height: 200px;
-        margin-bottom: 20px; /* Adjusted margin for smaller screens */
     }
     
     .bar {
@@ -436,79 +420,6 @@ justify-content: center;
 
     .bar::after {
         font-size: 10px;
-        bottom: -25px; /* Adjusted for smaller screens */
+        bottom: -25px;
     }
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #141414;
-    color: #ffffff; /* Changed to white */
-}
-
-/* Update text color for all basic text elements */
-p, h1, h2, h3, h4, h5, h6, span, div {
-    color: #ffffff;
-}
-
-/* Navbar styles */
-.navbar__links {
-    color: #ffffff;
-}
-
-/* Main content styles */
-.main__content h1 {
-    background-color: #77ff77;
-    background-image: linear-gradient(to top, #006600 10%, #ff0 100%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-
-.main__content h2 {
-    background-color: #77ff77;
-    background-image: linear-gradient(to top, #b721ff 0%, #21d4fd 100%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-
-.main__content p {
-    margin-top: 1rem;
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-/* Form input styles */
-input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea, select {
-    color: #ffffff;
-    background-color: #333333;
-    border: 1px solid #444444;
-}
-
-/* Placeholder text color */
-::placeholder {
-    color: #aaaaaa;
-}
-
-/* Button text color */
-.button, .btn {
-    color: #ffffff;
-}
-
-/* News and event item styles */
-.news-item h3, .event-item h3 {
-    color: #ffffff;
-}
-
-.news-item p, .event-item p {
-    color: #dddddd;
-}
-
-.news-item small, .event-item small {
-    color: #aaaaaa;
 }

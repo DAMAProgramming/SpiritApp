@@ -1,12 +1,23 @@
-import { getAuth, onAuthStateChanged } from './js/firebase-config.js';
+// auth-check.js
 
-const auth = getAuth();
+import { auth, db } from './js/firebase-config.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { getDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
-function checkAuth() {
+async function checkAuth(requireAdmin = false) {
   return new Promise((resolve, reject) => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        resolve(user);
+        if (requireAdmin) {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists() && userDoc.data().isAdmin) {
+            resolve(user);
+          } else {
+            reject('User is not an admin');
+          }
+        } else {
+          resolve(user);
+        }
       } else {
         reject('User not authenticated');
       }
@@ -16,17 +27,19 @@ function checkAuth() {
 
 // Check authentication on page load
 document.addEventListener('DOMContentLoaded', () => {
-  checkAuth()
+  const isAdminPage = window.location.pathname.includes('admin') || 
+                      window.location.pathname.includes('manage');
+  
+  checkAuth(isAdminPage)
     .then((user) => {
       console.log('User is authenticated:', user.email);
       // You can add any additional setup for authenticated users here
     })
     .catch((error) => {
       console.error('Authentication failed:', error);
-      alert('Please log in to access this page.');
-      window.location.href = '/SpiritApp/login.html';
+      alert('You do not have permission to access this page.');
+      window.location.href = './login.html';
     });
 });
 
-// Export the checkAuth function for use in other scripts if needed
 export { checkAuth };
