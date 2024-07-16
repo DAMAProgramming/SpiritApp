@@ -1,5 +1,38 @@
 // Initialize Firebase (make sure firebase-config.js is loaded before this script)
 import { db } from './js/firebase-config.js';
+import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu toggle functionality
+    const menu = document.querySelector('#mobile-menu');
+    const menuLinks = document.querySelector('.navbar__menu');
+
+    menu.addEventListener('click', function() {
+        menu.classList.toggle('is-active');
+        menuLinks.classList.toggle('active');
+    });
+
+    // Real-time point updates
+    const pointsDoc = doc(db, 'spiritPoints', 'classes');
+    onSnapshot(pointsDoc, (doc) => {
+        if (doc.exists()) {
+            updateChart(doc.data());
+        }
+    });
+});
+
+function updateChart(pointsData) {
+    const maxPoints = Math.max(...Object.values(pointsData));
+    
+    for (const [className, points] of Object.entries(pointsData)) {
+        const bar = document.querySelector(`.bar.${className.toLowerCase()}`);
+        if (bar) {
+            const percentage = (points / maxPoints) * 100;
+            bar.style.height = `${percentage}%`;
+            bar.setAttribute('data-points', points);
+        }
+    }
+}
 
 // Function to update spirit points
 function updateSpiritPoints() {
@@ -67,13 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
     loadEvents();
 });
 
-// Optionally, set up real-time listeners for updates
-// db.collection("spiritPoints").onSnapshot((snapshot) => {
-//     snapshot.docChanges().forEach((change) => {
-//         if (change.type === "modified") {
-//             updateSpiritPoints();
-//         }
-//     });
-// });
+document.addEventListener('DOMContentLoaded', function() {
+    const menu = document.querySelector('#mobile-menu');
+    const menuLinks = document.querySelector('.navbar__menu');
+
+    menu.addEventListener('click', function() {
+        menu.classList.toggle('is-active');
+        menuLinks.classList.toggle('active');
+    });
+});
 
 // Similar listeners can be set up for news and events if real-time updates are desired

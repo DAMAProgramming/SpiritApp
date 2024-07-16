@@ -1,20 +1,20 @@
-// js/admin-dashboard.js
+// admin-dashboard.js (and other admin page JS files)
 
 import { auth } from './firebase-config.js';
 import { signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logout-btn');
     
-    logoutBtn.addEventListener('click', (e) => {
+    logoutBtn.addEventListener('click', function(e) {
         e.preventDefault();
         signOut(auth).then(() => {
             // Sign-out successful.
-            alert('You have been logged out.');
-            window.location.href = './login.html';
+            console.log('User signed out');
+            window.location.href = '/login.html'; // Redirect to login page
         }).catch((error) => {
             // An error happened.
-            console.error('Logout failed:', error);
+            console.error('Sign out error:', error);
         });
     });
 });

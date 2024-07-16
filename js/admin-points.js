@@ -1,48 +1,70 @@
-// Initialize Firebase (make sure firebase-config.js is loaded before this script)
-import { db } from './firebase-config.js';
+// js/admin-points.js
 
-// Function to update spirit points in the chart
-function updateSpiritPointsChart() {
-    db.collection("spiritPoints").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const className = doc.id.toLowerCase();
-            const bar = document.querySelector(`.bar.${className}`);
-            if (bar) {
-                bar.style.height = `${data.points / 10}%`;
-                bar.setAttribute('data-points', data.points);
-            }
-        });
-    }).catch((error) => {
-        console.error("Error getting spirit points: ", error);
+import { db, auth } from './firebase-config.js';
+import { doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+document.addEventListener('DOMContentLoaded', function() {
+    const updatePointsForm = document.getElementById('update-points-form');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Listen for real-time updates to the points
+    const pointsDoc = doc(db, 'spiritPoints', 'classes');
+    onSnapshot(pointsDoc, (doc) => {
+        if (doc.exists()) {
+            updateChart(doc.data());
+        }
     });
-}
 
-// Function to update points in Firestore
-function updatePoints(className, points) {
-    return db.collection("spiritPoints").doc(className).set({
-        points: points
-    }, { merge: true });
-}
+    // Handle form submission
+    updatePointsForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const selectedClass = document.getElementById('class-select').value;
+        const points = parseInt(document.getElementById('points-input').value);
 
-// Event listener for form submission
-document.getElementById('update-points-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const className = document.getElementById('class-select').value;
-    const points = parseInt(document.getElementById('points-input').value);
+        try {
+            const pointsRef = doc(db, 'spiritPoints', 'classes');
+            const pointsSnapshot = await getDoc(pointsRef);
+            
+            let currentPoints = pointsSnapshot.exists() ? pointsSnapshot.data() : {};
+            currentPoints[selectedClass] = points;
 
-    updatePoints(className, points)
-        .then(() => {
-            console.log("Points updated successfully");
-            updateSpiritPointsChart();
-            alert("Points updated successfully!");
-        })
-        .catch((error) => {
+            await setDoc(pointsRef, currentPoints);
+            
+            alert('Points updated successfully!');
+            updatePointsForm.reset();
+        } catch (error) {
             console.error("Error updating points: ", error);
-            alert("Error updating points. Please try again.");
+            alert('Failed to update points. Please try again.');
+        }
+    });
+
+    // Handle logout (if not already implemented)
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                window.location.href = '/login.html';
+            }).catch((error) => {
+                console.error('Sign out error:', error);
+            });
         });
+    }
 });
 
-// Load current points when the page loads
-document.addEventListener('DOMContentLoaded', updateSpiritPointsChart);
+function updateChart(pointsData) {
+    const maxPoints = Math.max(...Object.values(pointsData));
+    
+    for (const [className, points] of Object.entries(pointsData)) {
+        const bar = document.querySelector(`.bar.${className.toLowerCase()}`);
+        if (bar) {
+            const percentage = (points / maxPoints) * 100;
+            bar.style.height = `${percentage}%`;
+            bar.setAttribute('data-points', points);
+        }
+    }
+}
+
+// Preserve any existing functionality from your original admin-points.js file here
+// ...
