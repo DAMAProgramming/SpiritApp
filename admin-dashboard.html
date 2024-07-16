@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHHS Spirit App - Admin Dashboard</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="./index.html" id="navbar__logo">
+                <img src="favicon.ico" alt="SHHS Logo" width="40">
+                SHHS Spirit App
+            </a>
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="navbar__menu">
+                <li class="navbar__item"><a href="./index.html" class="navbar__links">Home</a></li>
+                <li class="navbar__item"><a href="./admin-dashboard.html" class="navbar__links active">Admin Dashboard</a></li>
+                <li class="navbar__btn"><a href="#" id="logout-btn" class="button">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="main__container">
+            <h1>Admin Dashboard</h1>
+            <section class="admin-links">
+                <a href="./manage-points.html" class="admin-link">Manage Points</a>
+                <a href="./manage-news.html" class="admin-link">Manage News</a>
+                <!-- Add more admin function links as needed -->
+            </section>
+        </div>
+    </main>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="auth-check.js"></script>
+    <script type="module" src="js/admin-dashboard.js"></script>
+</body>
+</html>
