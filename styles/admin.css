@@ -27,6 +27,32 @@
     transform: translateY(-5px);
 }
 
+.manage-points .bar {
+    width: 60px;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    transition: height 0.5s ease-in-out;
+}
+
+.manage-points .bar.freshmen { background-color: #f0f0f0; }
+.manage-points .bar.sophomores { background-color: #333333; }
+.manage-points .bar.juniors { background-color: #ffe81c; }
+.manage-points .bar.seniors { background-color: #4dc905; }
+
+.manage-points .bar:hover {
+    opacity: 0.8;
+}
+
+.manage-points .points-display {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
 /* Form styles */
 .form-group {
     margin-bottom: 20px;

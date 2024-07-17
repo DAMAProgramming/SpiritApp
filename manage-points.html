@@ -31,23 +31,42 @@
         </div>
     </nav>
 
-    <main class="main">
+    <!-- Previous content remains the same -->
+
+    <div class="main manage-points" role="main">
         <div class="main__container">
-            <section class="content-section">
+            <div class="section content-section">
                 <h2>Manage Spirit Points</h2>
                 <div class="chart-container">
                     <h3>Current Spirit Points</h3>
                     <div class="chart">
-                        <div class="bar freshmen" data-class="Freshmen"></div>
-                        <div class="bar-label">Freshmen</div>
-                        <div class="bar sophomore" data-class="Sophomores"></div>
-                        <div class="bar-label">Sophomores</div>
-                        <div class="bar junior" data-class="Juniors"></div>
-                        <div class="bar-label">Juniors</div>
-                        <div class="bar senior" data-class="Seniors"></div>
-                        <div class="bar-label">Seniors</div>
+                        <div class="bar-container">
+                            <div class="bar-wrapper">
+                                <div class="bar freshmen" data-class="Freshmen"></div>
+                            </div>
+                            <div class="bar-label">Freshmen</div>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-wrapper">
+                                <div class="bar sophomores" data-class="Sophomores"></div>
+                            </div>
+                            <div class="bar-label">Sophomores</div>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-wrapper">
+                                <div class="bar juniors" data-class="Juniors"></div>
+                            </div>
+                            <div class="bar-label">Juniors</div>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-wrapper">
+                                <div class="bar seniors" data-class="Seniors"></div>
+                            </div>
+                            <div class="bar-label">Seniors</div>
+                        </div>
                     </div>
                 </div>
+
                 <form id="update-points-form">
                     <div class="form-group">
                         <label for="class-select">Select Class:</label>
@@ -60,13 +79,15 @@
                     </div>
                     <div class="form-group">
                         <label for="points-input">Points:</label>
-                        <input type="number" id="points-input" required min="0">
+                        <input type="number" id="points-input" required>
                     </div>
-                    <button type="submit" class="btn">Update Points</button>
+                    <button type="submit">Update Points</button>
                 </form>
-            </section>
+            </div>
         </div>
-    </main>
+    </div>
+
+    <!-- Rest of the HTML remains the same -->
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module">

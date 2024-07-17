@@ -5,7 +5,7 @@ function initBackgroundText() {
         return;
     }
 
-    const words = ['NEWS', 'POINTS', 'SPIRIT', 'EVENTS', 'SHHS', 'TRACKER', 'UPDATES', 'SCHOOL'];
+    const words = ['NEWS', 'POINTS', 'SPIRIT', 'EVENTS', 'SHHS', 'TRACKER', 'UPDATES', 'SCHOOL', 'HUSKIES', 'SWEET HOME'];
 
     function createWord(word) {
         const span = document.createElement('span');
@@ -19,7 +19,7 @@ function initBackgroundText() {
 
     function populateBackground() {
         backgroundText.innerHTML = ''; // Clear existing words
-        const wordCount = Math.floor((window.innerWidth * window.innerHeight) / 10000); // Adjust word count based on screen size
+        const wordCount = Math.floor((window.innerWidth * window.innerHeight) / 20000); // Adjust word count based on screen size
         for (let i = 0; i < wordCount; i++) {
             const word = words[Math.floor(Math.random() * words.length)];
             const wordElement = createWord(word);
@@ -30,5 +30,8 @@ function initBackgroundText() {
     populateBackground();
     window.addEventListener('resize', populateBackground); // Repopulate on resize
 }
+
+console.log("initBackgroundText function called");
+console.log("backgroundText element:", backgroundText);
 
 document.addEventListener('DOMContentLoaded', initBackgroundText);

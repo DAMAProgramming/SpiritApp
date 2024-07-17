@@ -9,9 +9,9 @@
   --secondary-color: #0056b3;
   --accent-color: #ffc107;
   --border-color: #dee2e6;
-  --navbar-bg: #f8f9fa;
+  --navbar-bg: rgba(255, 255, 255, 0.9);
   --button-text: #ffffff;
-  --bg-text-color: #f0f0f0;
+  --bg-text-color: #c9c9c9;
 }
 
 * {
@@ -24,6 +24,10 @@
 body {
     background-color: var(--background-color);
     color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    position: relative;
 }
 
 /* Navbar styles remain the same */
@@ -37,7 +41,7 @@ body {
     font-size: 1.2rem;
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 2;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -219,25 +223,6 @@ body {
     }
 }
 
-.background-text {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-}
-
-.bg-word {
-    position: absolute;
-    font-size: 52px;
-    color: var(--bg-text-color);
-    opacity: 0.8;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
 /* Main Content Styles */
 .main {
     background-color: var(--background-color);
@@ -252,6 +237,8 @@ body {
     margin: 0 auto;
     min-height: 90vh;
     padding: 50px 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .content-section {
@@ -300,7 +287,6 @@ body {
 
 .bar {
     width: 60px;
-    background-color: var(--primary-color);
     border-radius: 5px 5px 0 0;
     position: relative;
     transition: height 0.5s ease-in-out;
@@ -354,10 +340,10 @@ body {
     white-space: nowrap;
 }
 
-.freshman { background-color: #f0f0f0; }
-.sophomore { background-color: #333333; }
-.junior { background-color: #ffe81c; }
-.senior { background-color: #4dc905; }
+.bar.freshman { background-color: #f0f0f0; }
+.bar.sophomore { background-color: #333333; }
+.bar.junior { background-color: #ffe81c; }
+.bar.senior { background-color: #4dc905; }
 
 /* News Styles */
 #news-container {
