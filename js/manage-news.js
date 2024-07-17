@@ -1,10 +1,12 @@
-import { db, storage } from './firebase-config.js';
+import { db, storage, auth } from './firebase-config.js';
 import { collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const newsForm = document.getElementById('news-form');
     const newsList = document.getElementById('news-list');
+    const logoutBtn = document.getElementById('logout-btn');
 
     newsForm.addEventListener('submit', handleNewsSubmit);
     loadNews();
@@ -89,5 +91,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Error deleting news. Please try again.');
             }
         }
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log("Logout button clicked");
+            signOut(auth).then(() => {
+                console.log("User signed out successfully");
+                window.location.href = '/login.html';
+            }).catch((error) => {
+                console.error('Sign out error:', error);
+            });
+        });
     }
 });
