@@ -111,7 +111,7 @@ function setupEventListeners() {
         e.preventDefault();
         signOut(auth).then(() => {
             console.log("User signed out successfully");
-            window.location.href = '/login.html';
+            window.location.href = './index.html';
         }).catch((error) => {
             console.error('Sign out error:', error);
         });

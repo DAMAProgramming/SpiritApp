@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch((error) => {
       console.error('Authentication failed:', error);
       alert('You do not have permission to access this page.');
-      window.location.href = './login.html';
+      window.location.href = './index.html';
     });
 });
 

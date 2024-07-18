@@ -1,0 +1,82 @@
+.chart-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 30px;
+}
+
+.chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    height: 300px;
+    width: 100%;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+}
+
+.bar-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.bar {
+    width: 100%;
+    transition: height 0.5s ease-in-out;
+    position: relative;
+}
+
+.bar.freshmen { background-color: #f0f0f0; }
+.bar.sophomores { background-color: #333333; }
+.bar.juniors { background-color: #ffe81c; }
+.bar.seniors { background-color: #4dc905; }
+
+.points-display {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.bar-label {
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
+}
+
+#event-select {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+#event-details {
+    margin-top: 20px;
+}
+
+#event-history {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
