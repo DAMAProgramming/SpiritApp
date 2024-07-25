@@ -1,6 +1,6 @@
 // index.js
 import { db } from './js/firebase-config.js';
-import { doc, onSnapshot, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { doc, onSnapshot, collection, query, orderBy, limit, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM fully loaded");
@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Load news
     loadNews();
+    
+    // Load news ticker
+    loadNewsTicker();
 });
 
 function updateChart(pointsData) {
@@ -85,6 +88,133 @@ function updateChart(pointsData) {
             console.warn(`Bar container not found for ${className}`);
         }
     }
+}
+
+async function loadNewsTicker() {
+    const tickerContent = document.getElementById('ticker-content');
+    
+    try {
+        // Query the spirit points
+        const pointsDocRef = doc(db, 'spiritPoints', 'classes');
+        const pointsSnapshot = await getDoc(pointsDocRef);
+
+        // Query the new statistics document
+        const statsDocRef = doc(db, 'spiritPoints', 'statistics');
+        const statsSnapshot = await getDoc(statsDocRef);
+
+        let tickerItems = [];
+
+        if (pointsSnapshot.exists() && statsSnapshot.exists()) {
+            const pointsData = pointsSnapshot.data();
+            const statsData = statsSnapshot.data();
+            const classes = Object.keys(pointsData);
+            const totalPoints = Object.values(pointsData).reduce((sum, points) => sum + points, 0);
+            
+            for (const className of classes) {
+                const points = pointsData[className];
+                const stats = statsData[className];
+                const announcements = getRandomAnnouncements(className, points, classes, totalPoints, pointsData, stats);
+                tickerItems.push(...announcements);
+            }
+        }
+
+        // Shuffle the ticker items for variety
+        tickerItems = shuffleArray(tickerItems);
+
+        // Populate the ticker
+        tickerContent.innerHTML = tickerItems.map(item => `<li>${item}</li>`).join('');
+
+        // Clone all items and append them to create a seamless loop
+        tickerContent.innerHTML += tickerContent.innerHTML;
+
+        // Start the seamless scrolling
+        startSeamlessScrolling();
+
+    } catch (error) {
+        console.error('Error loading news ticker:', error);
+    }
+}
+
+function getRandomAnnouncements(className, points, allClasses, totalPoints, pointsData, stats) {
+    const announcements = [
+        `${className} are holding strong with ${points} spirit points!`,
+        `Go ${className}! They've earned ${points} spirit points so far!`,
+        `${className} are showing their spirit with ${points} points!`,
+        `${points} spirit points and counting for the ${className}!`,
+        `The ${className} are on fire with ${points} spirit points!`
+    ];
+
+    // Add some comparative announcements
+    const percentageOfTotal = ((points / totalPoints) * 100).toFixed(1);
+    announcements.push(`${className} have contributed ${percentageOfTotal}% of all spirit points!`);
+
+    const sortedClasses = allClasses.sort((a, b) => pointsData[b] - pointsData[a]);
+    const rank = sortedClasses.indexOf(className) + 1;
+    if (rank === 1) {
+        announcements.push(`${className} are in the lead with ${points} spirit points!`);
+    } else {
+        announcements.push(`${className} are in ${rank}${getOrdinalSuffix(rank)} place with ${points} points!`);
+    }
+
+    // Add new announcements based on stats
+    if (stats) {
+        if (stats.winStreak > 0) {
+            announcements.push(`${className} are on a ${stats.winStreak} event win streak!`);
+        }
+        announcements.push(`${className} have won ${stats.totalWins} events in total!`);
+        announcements.push(`${className} last won the "${stats.lastEventWon}" event!`);
+        if (stats.MVPs && stats.MVPs.length > 0) {
+            const mvp = stats.MVPs[Math.floor(Math.random() * stats.MVPs.length)];
+            announcements.push(`${mvp} has been a standout performer for the ${className}!`);
+        }
+    }
+
+    // Select a random subset of announcements to return
+    return shuffleArray(announcements).slice(0, 3);
+}
+
+function getOrdinalSuffix(i) {
+    var j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+        return "st";
+    }
+    if (j == 2 && k != 12) {
+        return "nd";
+    }
+    if (j == 3 && k != 13) {
+        return "rd";
+    }
+    return "th";
+}
+
+function startSeamlessScrolling() {
+    const ticker = document.querySelector('.news-ticker');
+    const tickerContent = document.getElementById('ticker-content');
+    let scrollAmount = 0;
+    const speed = 0.4;
+
+    function scroll() {
+        scrollAmount += speed;
+        tickerContent.style.transform = `translateX(-${scrollAmount}px)`;
+
+        // Reset when all items have scrolled
+        if (scrollAmount >= tickerContent.scrollWidth / 2) {
+            scrollAmount = 0;
+        }
+
+        requestAnimationFrame(scroll);
+    }
+
+    scroll();
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 async function loadNews() {

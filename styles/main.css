@@ -469,3 +469,57 @@ button[type="submit"]:hover, .btn:hover {
     margin-bottom: 10px;
     border-radius: 4px;
 }
+
+/* ... (existing CSS) ... */
+
+/* News Ticker Styles */
+.news-ticker-container {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.news-ticker-label {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.news-ticker {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.news-ticker ul {
+    display: inline-flex; /* Changed from flex to inline-flex */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    /* Removed animation property */
+}
+
+.news-ticker li {
+    white-space: nowrap;
+    padding: 10px;
+    margin-right: 50px;
+}
+
+/* Responsive design for news ticker */
+@media screen and (max-width: 768px) {
+    .news-ticker-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .news-ticker-label {
+        text-align: center;
+    }
+}
+
+/* ... (rest of the existing CSS) ... */

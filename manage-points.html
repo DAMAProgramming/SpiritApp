@@ -7,22 +7,65 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/admin.css">
     <link rel="stylesheet" href="styles/background-text.css">
+    <style>
+        .hierarchy-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .event-list, .game-list, .point-form {
+            flex: 1;
+            margin: 0 10px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .event-item, .game-item {
+            cursor: pointer;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+        }
+        .event-item:hover, .game-item:hover {
+            background-color: #e0e0e0;
+        }
+        .selected {
+            background-color: #d0d0d0;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div id="backgroundText" class="background-text"></div>
+
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="./index.html" id="navbar__logo"><img src="favicon.ico" alt="SHHS Logo" width="40"> SHHS Spirit Tracker</a>
+            <a href="./index.html" id="navbar__logo">
+                <img src="favicon.ico" alt="SHHS Logo" width="40">
+                SHHS Spirit Tracker
+            </a>
             <div class="navbar__toggle" id="mobile-menu">
                 <span class="toggle__line"></span>
                 <span class="toggle__line"></span>
                 <span class="toggle__line"></span>
             </div>
             <ul class="navbar__menu">
-                <li class="navbar__item"><a href="./admin-dashboard.html" class="navbar__links">Dashboard</a></li>
-                <li class="navbar__item"><a href="./manage-points.html" class="navbar__links">Manage Points</a></li>
-                <li class="navbar__item"><a href="./manage-news.html" class="navbar__links">Manage News</a></li>
-                <li class="navbar__item"><a href="#" id="logout-btn" class="navbar__links">Logout</a></li>
+                <li class="navbar__item">
+                    <a href="./admin-dashboard.html" class="navbar__links">Dashboard</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./manage-points.html" class="navbar__links">Manage Points</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./manage-news.html" class="navbar__links">Manage News</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="#" id="logout-btn" class="navbar__links">Logout</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -62,51 +105,40 @@
                     </div>
                 </div>
 
-                <h3>Update Points for Event</h3>
-                <form id="update-points-form">
-                    <div class="form-group">
-                        <label for="event-select">Select Event:</label>
-                        <select id="event-select" required>
-                            <!-- Event options will be populated by JavaScript -->
-                        </select>
+                <div class="hierarchy-container">
+                    <div class="event-list">
+                        <h3>Events</h3>
+                        <ul id="event-list"></ul>
                     </div>
-                    <div class="form-group">
-                        <label for="class-select">Select Class:</label>
-                        <select id="class-select" required>
-                            <option value="Freshmen">Freshmen</option>
-                            <option value="Sophomores">Sophomores</option>
-                            <option value="Juniors">Juniors</option>
-                            <option value="Seniors">Seniors</option>
-                        </select>
+                    <div class="game-list hidden">
+                        <h3>Games</h3>
+                        <ul id="game-list"></ul>
                     </div>
-                    <div class="form-group">
-                        <label for="points-input">Points:</label>
-                        <input type="number" id="points-input" required>
+                    <div class="point-form hidden">
+                        <h3>Update Points</h3>
+                        <form id="update-points-form">
+                            <div class="form-group">
+                                <label for="class-select">Select Class:</label>
+                                <select id="class-select" required>
+                                    <option value="Freshmen">Freshmen</option>
+                                    <option value="Sophomores">Sophomores</option>
+                                    <option value="Juniors">Juniors</option>
+                                    <option value="Seniors">Seniors</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="points-input">Points:</label>
+                                <input type="number" id="points-input" required>
+                            </div>
+                            <button type="submit">Update Points</button>
+                        </form>
                     </div>
-                    <button type="submit" class="btn">Update Points</button>
-                </form>
-
-                <h3>Add New Event</h3>
-                <form id="add-event-form">
-                    <div class="form-group">
-                        <label for="event-name">Event Name:</label>
-                        <input type="text" id="event-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="event-date">Event Date:</label>
-                        <input type="date" id="event-date" required>
-                    </div>
-                    <button type="submit" class="btn">Add Event</button>
-                </form>
-
-                
+                </div>
             </section>
 
             <section class="content-section">
-                <h3>Event History</h3>
-                <div id="event-history">
-                    <!-- Event history will be populated by JavaScript -->
-                </div>
+                <h2>View Current Statistics</h2>
+                <div id="current-stats"></div>
             </section>
         </div>
     </main>
