@@ -13,12 +13,25 @@
 
 .bg-word {
     position: absolute;
-    font-size: 24px;
+    font-size: 18px;
     color: #e9e9e9;
     opacity: 0.5;
     font-weight: bold;
     text-transform: uppercase;
-    transition: transform 0.05s linear; /* Reduced transition time for more responsive feel */
-    will-change: transform;
+    will-change: transform, opacity;
     transform-origin: center center;
+}
+
+.bg-word.visible {
+    transition: opacity 0.5s ease-out;
+}
+
+.bg-word.hidden {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+/* New class for mouse interaction */
+.bg-word.mouse-interact {
+    transition: transform 0s ease-out;
 }

@@ -6,6 +6,7 @@
     <title>SHHS Spirit Tracker</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/background-text.css">
+    <link rel="stylesheet" href="styles/calendar.css">
 </head>
 <body>
     <div class="background-text" id="backgroundText"></div>
@@ -75,18 +76,34 @@
                     <!-- News items will be dynamically added here -->
                 </div>
             </section>
-            <section id="upcoming-events" class="content-section">
+            <section id="upcoming-events" class="section content-section">
                 <h2>Upcoming Events</h2>
-                <div id="events-container">
-                    <!-- Event items will be dynamically added here -->
+                <div id="calendar-container">
+                    <div id="calendar-header">
+                        <button id="prev-month">&lt;</button>
+                        <h3 id="current-month-year"></h3>
+                        <button id="next-month">&gt;</button>
+                    </div>
+                    <div id="calendar"></div>
                 </div>
             </section>
         </div>
     </main>
+
+    <div id="event-popup" class="event-popup">
+        <div class="event-popup-content">
+            <span class="close-popup">&times;</span>
+            <h3 id="event-title"></h3>
+            <p id="event-date"></p>
+            <div id="event-games"></div>
+        </div>
+    </div>
+
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="index.js"></script>
     <script src="js/background-text.js"></script>
+    <script type="module" src="js/calendar.js"></script>
 </body>
 </html>

@@ -1,22 +1,27 @@
 // background-text.js
 
 class BackgroundWord {
-    constructor(word, x, y, speed, container) {
+    constructor(word, x, y, container, pageHeight) {
         this.word = word;
         this.x = x;
         this.y = y;
-        this.baseSpeed = speed;
-        this.currentSpeed = speed;
         this.container = container;
+        this.pageHeight = pageHeight;
         this.element = this.createElement();
-        this.direction = {
-            x: Math.random() > 0.5 ? 1 : -1,
-            y: Math.random() > 0.5 ? 1 : -1
-        };
         this.width = this.element.offsetWidth;
         this.height = this.element.offsetHeight;
-        this.rotation = 0;
-        this.rotationSpeed = (Math.random() - 0.5) * 2;
+        this.initialRotation = (Math.random() - 0.5) * 10;
+        this.currentRotation = this.initialRotation;
+        this.currentX = x;
+        this.currentY = y;
+        this.targetX = x;
+        this.targetY = y;
+        this.setTransform(this.currentX, this.currentY, this.currentRotation);
+        this.element.classList.add('hidden');
+        setTimeout(() => {
+            this.element.classList.remove('hidden');
+            this.element.classList.add('visible');
+        }, Math.random() * 1000);
     }
 
     createElement() {
@@ -27,52 +32,60 @@ class BackgroundWord {
         return span;
     }
 
-    move(others, scrollSpeed) {
-        // Apply scroll acceleration
-        this.currentSpeed = this.baseSpeed + Math.abs(scrollSpeed) * 0.1;
+    setTransform(x, y, rotation) {
+        this.element.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+    }
+
+    update(scrollY, mouseX, mouseY, viewportHeight) {
+        // Simple half-speed parallax
+        const parallaxY = scrollY * 0.5;
+        let yPos = this.y - parallaxY;
         
-        // Update position with scroll influence
-        this.x += this.currentSpeed * this.direction.x;
-        this.y += this.currentSpeed * this.direction.y - scrollSpeed * 0.5;
-
-        // Update rotation
-        this.rotation += this.rotationSpeed + scrollSpeed * 0.1;
-
-        // Check for collisions with container edges
-        if (this.x < 0 || this.x + this.width > this.container.clientWidth) {
-            this.direction.x *= -1;
-            this.rotationSpeed = (Math.random() - 0.5) * 2;
-        }
-        if (this.y < 0 || this.y + this.height > this.container.clientHeight) {
-            this.direction.y *= -1;
-            this.rotationSpeed = (Math.random() - 0.5) * 2;
+        // Wrap vertically if needed
+        if (yPos < -viewportHeight) {
+            yPos += this.pageHeight + viewportHeight * 2;
+        } else if (yPos > this.pageHeight + viewportHeight) {
+            yPos -= this.pageHeight + viewportHeight * 2;
         }
 
-        // Check for collisions with other words
-        others.forEach(other => {
-            if (other !== this && this.checkCollision(other)) {
-                this.resolveCollision(other);
-            }
-        });
+        const dx = mouseX - (this.x + this.width / 2);
+        const dy = mouseY - (yPos + this.height / 2);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        const repelRadius = 200;
+        let rotationAngle = this.initialRotation;
+        
+        if (distance < repelRadius) {
+            const repelFactor = (repelRadius - distance) / repelRadius;
+            this.targetX = this.x - dx * repelFactor * 0.5;
+            this.targetY = yPos - dy * repelFactor * 0.5;
+            
+            const maxRotation = 15;
+            rotationAngle += (dx > 0 ? -1 : 1) * repelFactor * maxRotation;
+            this.element.classList.add('mouse-interact');
+        } else {
+            this.targetX = this.x;
+            this.targetY = yPos;
+            this.element.classList.remove('mouse-interact');
+        }
 
-        // Apply new position and rotation
-        this.element.style.transform = `translate(${this.x}px, ${this.y}px) rotate(${this.rotation}deg)`;
-    }
+        // Smooth transition for position
+        this.currentX += (this.targetX - this.currentX) * 0.05;
+        this.currentY += (this.targetY - this.currentY) * 0.05;
 
-    checkCollision(other) {
-        return (
-            this.x < other.x + other.width &&
-            this.x + this.width > other.x &&
-            this.y < other.y + other.height &&
-            this.y + this.height > other.y
-        );
-    }
+        // Smooth transition for rotation
+        this.currentRotation += (rotationAngle - this.currentRotation) * 0.05;
 
-    resolveCollision(other) {
-        [this.direction.x, other.direction.x] = [other.direction.x, this.direction.x];
-        [this.direction.y, other.direction.y] = [other.direction.y, this.direction.y];
-        this.rotationSpeed = (Math.random() - 0.5) * 2;
-        other.rotationSpeed = (Math.random() - 0.5) * 2;
+        // Set visibility based on position
+        if (this.currentY < -viewportHeight || this.currentY > viewportHeight * 2) {
+            this.element.classList.add('hidden');
+            this.element.classList.remove('visible');
+        } else {
+            this.element.classList.remove('hidden');
+            this.element.classList.add('visible');
+        }
+
+        this.setTransform(this.currentX, this.currentY, this.currentRotation);
     }
 }
 
@@ -83,43 +96,58 @@ function initBackgroundText() {
         return;
     }
 
-    const words = ['NEWS', 'POINTS', 'SPIRIT', 'EVENTS', 'SHHS', 'TRACKER', 'UPDATES', 'SCHOOL', 'HUSKIES', 'SWEET HOME'];
+    const words = ['NEWS', 'POINTS', 'SPIRIT', 'EVENTS', 'SHHS', 'TRACKER', 'UPDATES', 'SCHOOL', 'HUSKIES', 'SWEET HOME', 'MAY WEEK', 'ANNOUCEMENTS', 'ASSEMBLIES', 'SCHOOL SPIRIT'];
     let bgWords = [];
-    let scrollSpeed = 0;
-    let lastScrollTop = 0;
+    let mouseX = 0;
+    let mouseY = 0;
 
     function populateBackground() {
         backgroundText.innerHTML = '';
         bgWords = [];
 
-        const wordCount = Math.floor((window.innerWidth * window.innerHeight) / 30000);
+        const containerWidth = backgroundText.clientWidth;
+        const pageHeight = Math.max(
+            document.body.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.clientHeight,
+            document.documentElement.scrollHeight,
+            document.documentElement.offsetHeight
+        );
+        const extendedHeight = pageHeight + window.innerHeight * 2; // Add extra space top and bottom
+
+        // Maintain the same word density
+        const wordCount = Math.floor((containerWidth * extendedHeight) / 15000);
+        
         for (let i = 0; i < wordCount; i++) {
+            let x, y, overlapping;
+            do {
+                x = Math.random() * containerWidth;
+                y = Math.random() * extendedHeight - window.innerHeight; // Offset to account for extra top space
+                overlapping = bgWords.some(word => 
+                    Math.abs(word.x - x) < 100 && Math.abs(word.y - y) < 50
+                );
+            } while (overlapping);
+
             const word = words[Math.floor(Math.random() * words.length)];
-            const x = Math.random() * (backgroundText.clientWidth - 100);
-            const y = Math.random() * (backgroundText.clientHeight - 30);
-            const speed = 0.5 + Math.random() * 0.7;
-            bgWords.push(new BackgroundWord(word, x, y, speed, backgroundText));
+            bgWords.push(new BackgroundWord(word, x, y, backgroundText, pageHeight));
         }
     }
 
     function animate() {
-        bgWords.forEach(word => word.move(bgWords, scrollSpeed));
-        // Gradually reduce scroll speed
-        scrollSpeed *= 0.95;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const viewportHeight = window.innerHeight;
+        bgWords.forEach(word => word.update(scrollY, mouseX, mouseY, viewportHeight));
         requestAnimationFrame(animate);
     }
 
     populateBackground();
     animate();
 
-    // Handle scroll events
-    window.addEventListener('scroll', () => {
-        const st = window.pageYOffset || document.documentElement.scrollTop;
-        scrollSpeed = st - lastScrollTop;
-        lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
     });
 
-    // Repopulate on resize, with debounce
     let resizeTimer;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);

@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHHS Spirit Tracker - Admin Dashboard</title>
+    <title>Admin Dashboard - SHHS Spirit Tracker</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/admin.css">
+    <link rel="stylesheet" href="styles/admin-dashboard.css">
     <link rel="stylesheet" href="styles/background-text.css">
 </head>
 <body>
-    <div class="background-text" id="backgroundText"></div>
+    <div id="backgroundText" class="background-text"></div>
+
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="./index.html" id="navbar__logo">
-                <img src="favicon.ico" alt="SHHS Logo" width="40">
-                SHHS Spirit Tracker
-            </a>
+            <a href="./index.html" id="navbar__logo">SHHS Spirit Tracker</a>
             <div class="navbar__toggle" id="mobile-menu">
                 <span class="toggle__line"></span>
                 <span class="toggle__line"></span>
@@ -23,35 +22,48 @@
             </div>
             <ul class="navbar__menu">
                 <li class="navbar__item"><a href="./admin-dashboard.html" class="navbar__links">Dashboard</a></li>
-                <li class="navbar__item"><a href="./manage-points.html" class="navbar__links">Manage Points</a></li>
-                <li class="navbar__item"><a href="./manage-news.html" class="navbar__links">Manage News</a></li>
-                <li class="navbar__item"><a href="#" id="logout-btn" class="navbar__links navbar__btn">Logout</a></li>
+                <li class="navbar__btn"><a href="#" id="logout-btn" class="button">Logout</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="main">
+    <main class="main" role="main">
         <div class="main__container">
             <h1>Admin Dashboard</h1>
-            <section class="admin-links">
-                <a href="./manage-points.html" class="admin-link">Manage Points</a>
-                <a href="./manage-news.html" class="admin-link">Manage News</a>
-                <!-- Add more admin function links as needed -->
-            </section>
+            <div class="admin-links">
+                <div class="admin-link" data-page="manage-points">
+                    <div class="admin-link-preview">
+                        <img src="images/manage-points-preview-1.jpg" alt="Manage Points Preview">
+                    </div>
+                    <div class="admin-link-overlay">
+                        <h2>Manage Points</h2>
+                        <p>Update and track spirit points for each class</p>
+                    </div>
+                </div>
+                <div class="admin-link" data-page="manage-games">
+                    <div class="admin-link-preview">
+                        <img src="images/manage-games-preview-1.jpg" alt="Manage Games Preview">
+                    </div>
+                    <div class="admin-link-overlay">
+                        <h2>Manage Games</h2>
+                        <p>Add, edit, and remove upcoming games and events</p>
+                    </div>
+                </div>
+                <div class="admin-link" data-page="manage-news">
+                    <div class="admin-link-preview">
+                        <img src="images/manage-news-preview-1.jpg" alt="Manage News Preview">
+                    </div>
+                    <div class="admin-link-overlay">
+                        <h2>Manage News</h2>
+                        <p>Post and edit news updates for the spirit tracker</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
     <script type="module" src="js/firebase-config.js"></script>
-    <script type="module">
-        import { checkAuth } from './auth-check.js';
-        
-        checkAuth(true)  // Require admin status
-            .catch((error) => {
-                console.error('Authentication failed:', error);
-                alert('You do not have permission to access this page.');
-                window.location.href = '/SpiritApp/login.html';
-            });
-    </script>
+    <script type="module" src="auth-check.js"></script>
     <script type="module" src="js/admin-dashboard.js"></script>
     <script src="js/background-text.js"></script>
 </body>

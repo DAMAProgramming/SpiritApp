@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Games - SHHS Spirit Tracker</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/admin.css">
+    <link rel="stylesheet" href="styles/background-text.css">
+</head>
+<body>
+    <div id="backgroundText" class="background-text"></div>
+
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="./index.html" id="navbar__logo">
+                <img src="favicon.ico" alt="SHHS Logo" width="40">
+                SHHS Spirit Tracker
+            </a>
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+            </div>
+            <ul class="navbar__menu">
+                <li class="navbar__item"><a href="./admin-dashboard.html" class="navbar__links">Dashboard</a></li>
+                <li class="navbar__item"><a href="./manage-points.html" class="navbar__links">Manage Points</a></li>
+                <li class="navbar__item"><a href="./manage-games.html" class="navbar__links">Manage Games</a></li>
+                <li class="navbar__item"><a href="./manage-news.html" class="navbar__links">Manage News</a></li>
+                <li class="navbar__item"><a href="#" id="logout-btn" class="navbar__links">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main manage-games" role="main">
+        <div class="main__container">
+            <section class="section content-section">
+                <h2>Manage Games</h2>
+                <form id="add-game-form">
+                    <div class="form-group">
+                        <label for="game-name">Game Name:</label>
+                        <input type="text" id="game-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="game-date">Game Date:</label>
+                        <input type="date" id="game-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="game-description">Description:</label>
+                        <textarea id="game-description" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Add Game</button>
+                </form>
+            </section>
+
+            <section class="section content-section">
+                <h2>Existing Games</h2>
+                <div id="games-list"></div>
+            </section>
+        </div>
+    </main>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="auth-check.js"></script>
+    <script type="module" src="js/manage-games.js"></script>
+    <script src="js/background-text.js"></script>
+</body>
+</html>
