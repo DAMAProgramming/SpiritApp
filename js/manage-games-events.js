@@ -1,4 +1,5 @@
 // calendar.js
+
 import { db } from './firebase-config.js';
 import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
@@ -28,23 +29,6 @@ export function initializeCalendar() {
     loadEvents();
 }
 
-// Add the handleCalendarClick function
-function handleCalendarClick(e) {
-    const clickedDay = e.target.closest('.calendar-day');
-    if (!clickedDay || clickedDay.classList.contains('other-month') || clickedDay.classList.contains('day-name')) return;
-
-    const clickedDate = clickedDay.getAttribute('data-date');
-    console.log("Clicked on date:", clickedDate);
-
-    if (clickedDay.classList.contains('event')) {
-        const dayEvents = events.filter(event => event.date === clickedDate);
-        console.log("Events for clicked date:", dayEvents);
-        showEventPopup(dayEvents);
-    } else {
-        console.log("No events for this date");
-    }
-}
-
 export async function loadEvents() {
     console.log("Loading events for", currentDate.toLocaleString('default', { month: 'long', year: 'numeric' }));
     const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -55,45 +39,19 @@ export async function loadEvents() {
 
     console.log("Query date range:", startDateString, "to", endDateString);
 
+    const q = query(
+        collection(db, 'games'),
+        where('date', '>=', startDateString),
+        where('date', '<=', endDateString)
+    );
+
     try {
-        const eventsCollection = collection(db, 'events'); // Changed from 'games' to 'events'
-        console.log("Events collection reference:", eventsCollection);
-
-        const q = query(
-            eventsCollection,
-            where('date', '>=', startDateString),
-            where('date', '<=', endDateString)
-        );
-        console.log("Query:", q);
-
         const querySnapshot = await getDocs(q);
-        console.log("Query snapshot:", querySnapshot);
-        console.log("Query snapshot size:", querySnapshot.size);
-
-        events = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            console.log("Document data:", data);
-            return {id: doc.id, ...data};
-        });
-
+        events = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
         console.log("Events loaded:", events);
-
-        // Check specifically for August 2nd, 2024 event
-        const augustSecondEvent = events.find(event => event.date === '2024-08-02');
-        if (augustSecondEvent) {
-            console.log("Found event for August 2nd, 2024:", augustSecondEvent);
-        } else {
-            console.log("No event found for August 2nd, 2024");
-        }
-
-        if (events.length === 0) {
-            console.log("No events found for the current month. Checking Firestore rules and data.");
-        }
-
         renderCalendar();
     } catch (error) {
         console.error("Error loading events:", error);
-        console.error("Error details:", error.code, error.message);
     }
 }
 
@@ -161,6 +119,22 @@ function createDayElement(day, isOtherMonth = false) {
     return dayEl;
 }
 
+function handleCalendarClick(e) {
+    const clickedDay = e.target.closest('.calendar-day');
+    if (!clickedDay || clickedDay.classList.contains('other-month')) return;
+
+    const clickedDate = clickedDay.getAttribute('data-date');
+    console.log("Clicked on date:", clickedDate);
+
+    if (clickedDay.classList.contains('event')) {
+        const dayEvents = events.filter(event => event.date === clickedDate);
+        console.log("Events for clicked date:", dayEvents);
+        showEventPopup(dayEvents);
+    } else {
+        console.log("No events for this date");
+    }
+}
+
 function changeMonth(delta) {
     currentDate.setMonth(currentDate.getMonth() + delta);
     loadEvents();
@@ -169,11 +143,10 @@ function changeMonth(delta) {
 function showEventPopup(events) {
     console.log("Showing event popup for events:", events);
     const popup = document.getElementById('event-popup');
-    const popupContent = popup.querySelector('.event-popup-content');
     const title = document.getElementById('event-title');
     const gamesList = document.getElementById('event-games');
     
-    if (!popup || !popupContent || !title || !gamesList) {
+    if (!popup || !title || !gamesList) {
         console.error("Event popup elements not found");
         return;
     }
@@ -191,26 +164,14 @@ function showEventPopup(events) {
         gamesList.appendChild(gameItem);
     });
     
-    popup.style.display = 'flex';
-    requestAnimationFrame(() => {
-        popup.classList.add('active');
-    });
+    popup.style.display = 'block';
 }
 
 function closeEventPopup() {
     const popup = document.getElementById('event-popup');
     if (popup) {
-        popup.classList.remove('active');
-        popup.addEventListener('transitionend', function handler(e) {
-            if (e.propertyName === 'background-color') {
-                popup.style.display = 'none';
-                popup.removeEventListener('transitionend', handler);
-            }
-        });
+        popup.style.display = 'none';
     } else {
         console.error("Event popup not found");
     }
 }
-
-// Make sure to export any functions that need to be accessed from other files
-export { handleCalendarClick, showEventPopup, closeEventPopup };

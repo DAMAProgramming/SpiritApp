@@ -60,31 +60,41 @@
 }
 
 .event-popup {
-    display: none;
+    display: flex;
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
+    background-color: rgba(0,0,0,0);
+    transition: background-color 0.3s ease;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.event-popup.active {
     background-color: rgba(0,0,0,0.5);
+    pointer-events: auto;
 }
 
 .event-popup-content {
     background-color: #fefefe;
-    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 600px;
     border-radius: 10px;
     position: relative;
-    animation: popupFadeIn 0.3s;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s ease;
 }
 
-@keyframes popupFadeIn {
-    from {opacity: 0; transform: scale(0.8);}
-    to {opacity: 1; transform: scale(1);}
+.event-popup.active .event-popup-content {
+    transform: scale(1);
+    opacity: 1;
 }
 
 .close-popup {
@@ -93,13 +103,13 @@
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .close-popup:hover,
 .close-popup:focus {
     color: #000;
     text-decoration: none;
-    cursor: pointer;
 }
 
 #event-games {
@@ -112,4 +122,14 @@
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
+}
+
+/* Add a subtle hover effect for days with events */
+.calendar-day.event {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendar-day.event:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }

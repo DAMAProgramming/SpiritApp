@@ -522,4 +522,97 @@ button[type="submit"]:hover, .btn:hover {
     }
 }
 
-/* ... (rest of the existing CSS) ... */
+/* Footer Styles */
+.footer {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 40px 0 20px;
+    font-size: 14px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+.footer__section {
+    flex: 0 1 auto; /* Changed from flex: 1 to allow sections to have different widths */
+    margin-bottom: 20px;
+    padding-right: 30px; /* Reduced padding from 40px to 30px */
+}
+
+.footer__section:last-child {
+    padding-right: 0;
+}
+
+/* New styles for specific sections */
+.footer__section--about {
+    flex-basis: 40%; /* Takes up 40% of the container width */
+}
+
+.footer__section--links {
+    flex-basis: 20%; /* Takes up 20% of the container width */
+}
+
+.footer__section--contact {
+    flex-basis: 30%; /* Takes up 30% of the container width */
+}
+
+.footer__section h4 {
+    color: var(--primary-color);
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.footer__section p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.footer__section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer__section ul li {
+    margin-bottom: 8px;
+}
+
+.footer__section a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer__section a:hover {
+    color: var(--primary-color);
+}
+
+.footer__bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive design for footer */
+@media screen and (max-width: 768px) {
+    .footer__container {
+        flex-direction: column;
+    }
+
+    .footer__section,
+    .footer__section--about,
+    .footer__section--links,
+    .footer__section--contact {
+        width: 100%;
+        flex-basis: 100%;
+        margin-bottom: 30px;
+        padding-right: 0;
+    }
+}

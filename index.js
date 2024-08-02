@@ -1,6 +1,9 @@
 // index.js
 import { db } from './js/firebase-config.js';
 import { doc, onSnapshot, collection, query, orderBy, limit, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { initializeCalendar, loadEvents } from './js/calendar.js'; // Import calendar functions
+
+let calendarInitialized = false;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM fully loaded");
@@ -15,8 +18,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Real-time point updates
-    console.log("Setting up real-time listener");
+    // Initialize calendar only once
+    if (!calendarInitialized) {
+        try {
+            initializeCalendar();
+            calendarInitialized = true;
+        } catch (error) {
+            console.error("Error initializing calendar:", error);
+        }
+    }
+
+    // Set up real-time listener for points
     const pointsDoc = doc(db, 'spiritPoints', 'classes');
     onSnapshot(pointsDoc, (doc) => {
         console.log("Snapshot received");
@@ -35,6 +47,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load news ticker
     loadNewsTicker();
+
+    // Initialize calendar and load events
+    initializeCalendar();
+    loadEvents();
+
+    try {
+        initializeCalendar();
+    } catch (error) {
+        console.error("Error initializing calendar:", error);
+    }
 });
 
 function updateChart(pointsData) {

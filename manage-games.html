@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Games - SHHS Spirit Tracker</title>
+    <title>Manage Games and Events - SHHS Spirit Tracker</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/admin.css">
     <link rel="stylesheet" href="styles/background-text.css">
 </head>
 <body>
+    <!-- Background text for visual effect -->
     <div id="backgroundText" class="background-text"></div>
 
+    <!-- Navigation bar -->
     <nav class="navbar">
         <div class="navbar__container">
             <a href="./index.html" id="navbar__logo">
@@ -25,44 +27,69 @@
             <ul class="navbar__menu">
                 <li class="navbar__item"><a href="./admin-dashboard.html" class="navbar__links">Dashboard</a></li>
                 <li class="navbar__item"><a href="./manage-points.html" class="navbar__links">Manage Points</a></li>
-                <li class="navbar__item"><a href="./manage-games.html" class="navbar__links">Manage Games</a></li>
                 <li class="navbar__item"><a href="./manage-news.html" class="navbar__links">Manage News</a></li>
+                <li class="navbar__item"><a href="./manage-games.html" class="navbar__links">Manage Games</a></li>
                 <li class="navbar__item"><a href="#" id="logout-btn" class="navbar__links">Logout</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="main manage-games" role="main">
+    <!-- Main content area -->
+    <main class="main manage-games-events" role="main">
         <div class="main__container">
+            <!-- Game Management Section -->
             <section class="section content-section">
                 <h2>Manage Games</h2>
+                <!-- Form to add new games -->
                 <form id="add-game-form">
                     <div class="form-group">
                         <label for="game-name">Game Name:</label>
                         <input type="text" id="game-name" required>
                     </div>
                     <div class="form-group">
-                        <label for="game-date">Game Date:</label>
-                        <input type="date" id="game-date" required>
-                    </div>
-                    <div class="form-group">
                         <label for="game-description">Description:</label>
-                        <textarea id="game-description" rows="4"></textarea>
+                        <textarea id="game-description" required></textarea>
                     </div>
                     <button type="submit" class="btn">Add Game</button>
                 </form>
+
+                <!-- List of existing games -->
+                <h3>Existing Games</h3>
+                <div id="games-list"></div>
             </section>
 
+            <!-- Event Management Section -->
             <section class="section content-section">
-                <h2>Existing Games</h2>
-                <div id="games-list"></div>
+                <h2>Manage Events</h2>
+                <!-- Form to add new events -->
+                <form id="add-event-form">
+                    <div class="form-group">
+                        <label for="event-name">Event Name:</label>
+                        <input type="text" id="event-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date">Event Date:</label>
+                        <input type="date" id="event-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-games">Select Games:</label>
+                        <select id="event-games" multiple>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Add Event</button>
+                </form>
+
+                <!-- List of existing events -->
+                <h3>Existing Events</h3>
+                <div id="events-list"></div>
             </section>
         </div>
     </main>
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="auth-check.js"></script>
-    <script type="module" src="js/manage-games.js"></script>
+    <script type="module" src="js/manage-games-events.js"></script>
     <script src="js/background-text.js"></script>
 </body>
 </html>
