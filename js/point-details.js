@@ -1,5 +1,3 @@
-// point-details.js
-
 import { db } from './firebase-config.js';
 import { collection, getDocs, query, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
@@ -10,13 +8,21 @@ document.addEventListener('DOMContentLoaded', function() {
     loadEventHistory();
 
     const eventSelect = document.getElementById('event-select');
-    eventSelect.addEventListener('change', function() {
-        updateChart(this.value);
-    });
+    if (eventSelect) {
+        eventSelect.addEventListener('change', function() {
+            updateChart(this.value);
+        });
+    } else {
+        console.error("Element with id 'event-select' not found");
+    }
 });
 
 async function loadEvents() {
     const eventSelect = document.getElementById('event-select');
+    if (!eventSelect) {
+        console.error("Element with id 'event-select' not found");
+        return;
+    }
     
     try {
         // Query events ordered by date in descending order

@@ -199,3 +199,63 @@ input[type="file"] {
 .delete-btn:hover {
     background-color: #c82333;
 }
+
+/* Styles for item lists */
+.item-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.item-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.item-list li:last-child {
+    border-bottom: none;
+}
+
+/* Styles for delete buttons */
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Select2 custom styles */
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #007bff;
+    border: 1px solid #006fe6;
+    color: #fff;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #fff;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #fff;
+    background-color: #0056b3;
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHHS Spirit Tracker - News</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/news.css">
+    <link rel="stylesheet" href="styles/background-text.css">
+</head>
+<body>
+    <div id="backgroundText" class="background-text"></div>
+
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="./index.html" id="navbar__logo">
+                <img src="favicon.ico" alt="SHHS Logo" width="40">
+                SHHS Spirit Tracker
+            </a>
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+            </div>
+            <ul class="navbar__menu">
+                <li class="navbar__item">
+                    <a href="./index.html" class="navbar__links">Home</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./point-details.html" class="navbar__links">Points</a>
+                </li>
+                
+                <li class="navbar__item">
+                    <a href="./games.html" class="navbar__links">Games</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./news.html" class="navbar__links">News</a>
+                </li>
+                <li class="navbar__btn">
+                    <a href="./login.html" class="button">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main news-page">
+        <div class="main__container">
+            <h1>Latest News</h1>
+            <div id="news-grid" class="news-grid">
+                <!-- News items will be dynamically added here -->
+            </div>
+        </div>
+    </main>
+
+    <div id="news-popup" class="news-popup">
+        <div class="news-popup__content">
+            <span class="news-popup__close">&times;</span>
+            <h2 id="popup-title" class="news-popup__title"></h2>
+            <img id="popup-image" class="news-popup__image" src="" alt="">
+            <p id="popup-content" class="news-popup__text"></p>
+            <p id="popup-date" class="news-popup__date"></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__section footer__section--about">
+                <h4>About SHHS Spirit Tracker</h4>
+                <p>A student-made website, created by Ethan Malabago and Hunter Dalley to further celebrate our school spirit!</p>
+                <p>Feel free to contact us about suggestions or bug reports!</p>
+            </div>
+            <div class="footer__section footer__section--links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./news.html">News</a></li>
+                    <li><a href="./point-details.html">Points</a></li>
+                    <li><a href="./admin-dashboard.html">Admin Dashboard</a></li>
+                    <li><a href="https://github.com/DAMAProgramming/SpiritApp">Our Source Code</a></li>
+                </ul>
+            </div>
+            <div class="footer__section footer__section--contact">
+                <h4>Contact</h4>
+                <p>Our combined Email: damaprogramming@gmail.com</p>
+                <p>Ethan's Programming Email: ethanmprogramming@gmail.com</p>
+                <p>Hunter's Programming Email: n/a</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            SHHS Spirit Tracker - A student-made project for Sweet Home High School
+        </div>
+    </footer>
+
+    <script src="js/firebase-config.js" type="module"></script>
+    <script src="js/background-text.js" type="module"></script>
+    <script src="js/mainInteract.js" type="module"></script>
+    <script src="js/news.js" type="module"></script>
+</body>
+</html>

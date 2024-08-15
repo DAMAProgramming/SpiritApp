@@ -1,6 +1,6 @@
 // calendar.js
 import { db } from './firebase-config.js';
-import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 let currentDate = new Date();
 let events = [];
@@ -28,7 +28,6 @@ export function initializeCalendar() {
     loadEvents();
 }
 
-// Add the handleCalendarClick function
 function handleCalendarClick(e) {
     const clickedDay = e.target.closest('.calendar-day');
     if (!clickedDay || clickedDay.classList.contains('other-month') || clickedDay.classList.contains('day-name')) return;
@@ -56,7 +55,7 @@ export async function loadEvents() {
     console.log("Query date range:", startDateString, "to", endDateString);
 
     try {
-        const eventsCollection = collection(db, 'events'); // Changed from 'games' to 'events'
+        const eventsCollection = collection(db, 'events');
         console.log("Events collection reference:", eventsCollection);
 
         const q = query(
@@ -77,18 +76,6 @@ export async function loadEvents() {
         });
 
         console.log("Events loaded:", events);
-
-        // Check specifically for August 2nd, 2024 event
-        const augustSecondEvent = events.find(event => event.date === '2024-08-02');
-        if (augustSecondEvent) {
-            console.log("Found event for August 2nd, 2024:", augustSecondEvent);
-        } else {
-            console.log("No event found for August 2nd, 2024");
-        }
-
-        if (events.length === 0) {
-            console.log("No events found for the current month. Checking Firestore rules and data.");
-        }
 
         renderCalendar();
     } catch (error) {
@@ -166,7 +153,7 @@ function changeMonth(delta) {
     loadEvents();
 }
 
-function showEventPopup(events) {
+async function showEventPopup(events) {
     console.log("Showing event popup for events:", events);
     const popup = document.getElementById('event-popup');
     const popupContent = popup.querySelector('.event-popup-content');
@@ -181,15 +168,54 @@ function showEventPopup(events) {
     title.textContent = 'Events for this day';
     
     gamesList.innerHTML = '';
-    events.forEach(event => {
-        const gameItem = document.createElement('div');
-        gameItem.classList.add('game-item');
-        gameItem.innerHTML = `
-            <h4>${event.name}</h4>
-            <p>${event.description || 'No description available.'}</p>
-        `;
-        gamesList.appendChild(gameItem);
+    
+    // Create a set to store unique game IDs
+    const uniqueGameIds = new Set();
+
+    // Add event names section
+    const eventNamesSection = document.createElement('div');
+    eventNamesSection.innerHTML = '<h3>Event Names:</h3>';
+    gamesList.appendChild(eventNamesSection);
+
+    for (const event of events) {
+        const eventItem = document.createElement('div');
+        eventItem.classList.add('event-item');
+        eventItem.innerHTML = `<p>${event.name}</p>`;
+        eventNamesSection.appendChild(eventItem);
+
+        // Add game IDs to the set
+        event.games.forEach(gameId => uniqueGameIds.add(gameId));
+    }
+
+    // Add games section
+    const gamesSection = document.createElement('div');
+    gamesSection.innerHTML = '<h3>Games in Events:</h3>';
+    gamesList.appendChild(gamesSection);
+
+    // Fetch and display game details
+    for (const gameId of uniqueGameIds) {
+        try {
+            const gameDoc = await getDoc(doc(db, 'games', gameId));
+            if (gameDoc.exists()) {
+                const gameData = gameDoc.data();
+                const gameItem = document.createElement('div');
+                gameItem.classList.add('game-item');
+                gameItem.innerHTML = `<p>${gameData.name}</p>`;
+                gamesSection.appendChild(gameItem);
+            }
+        } catch (error) {
+            console.error('Error fetching game details:', error);
+        }
+    }
+
+    // Add "View All Games" button
+    const viewAllGamesBtn = document.createElement('button');
+    viewAllGamesBtn.textContent = 'View All Games';
+    viewAllGamesBtn.classList.add('view-all-games-btn');
+    viewAllGamesBtn.addEventListener('click', () => {
+        window.location.href = './games.html';
     });
+    gamesList.appendChild(viewAllGamesBtn);
     
     popup.style.display = 'flex';
     requestAnimationFrame(() => {
