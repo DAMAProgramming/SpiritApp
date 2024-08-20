@@ -4,148 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Points - SHHS Spirit Tracker</title>
-    <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/admin.css">
+    <link rel="stylesheet" href="styles/manage_points.css">
     <link rel="stylesheet" href="styles/background-text.css">
-    <style>
-        .hierarchy-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .event-list, .game-list, .point-form {
-            flex: 1;
-            margin: 0 10px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .event-item, .game-item {
-            cursor: pointer;
-            padding: 10px;
-            margin: 5px 0;
-            background-color: #f0f0f0;
-            border-radius: 3px;
-        }
-        .event-item:hover, .game-item:hover {
-            background-color: #e0e0e0;
-        }
-        .selected {
-            background-color: #d0d0d0;
-            font-weight: bold;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <div id="backgroundText" class="background-text"></div>
 
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="./index.html" id="navbar__logo">
-                <img src="favicon.ico" alt="SHHS Logo" width="40">
-                SHHS Spirit Tracker
-            </a>
+            <a href="./index.html" id="navbar__logo"><img src="favicon.ico" alt="SHHS Logo" width="40"> SHHS Spirit Tracker</a>
             <div class="navbar__toggle" id="mobile-menu">
-                <span class="toggle__line"></span>
-                <span class="toggle__line"></span>
-                <span class="toggle__line"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
             <ul class="navbar__menu">
-                <li class="navbar__item">
-                    <a href="./admin-dashboard.html" class="navbar__links">Dashboard</a>
-                </li>
-                <li class="navbar__item">
-                    <a href="./manage-points.html" class="navbar__links">Manage Points</a>
-                </li>
-                <li class="navbar__item">
-                    <a href="./manage-news.html" class="navbar__links">Manage News</a>
-                </li>
-                <li class="navbar__item">
-                    <a href="#" id="logout-btn" class="navbar__links">Logout</a>
-                </li>
+                <li class="navbar__item"><a href="./admin-dashboard.html" class="navbar__links">Dashboard</a></li>
+                <li class="navbar__item"><a href="./manage-points.html" class="navbar__links">Manage Points</a></li>
+                <li class="navbar__item"><a href="./manage-news.html" class="navbar__links">Manage News</a></li>
+                <li class="navbar__btn"><a href="#" id="logout-btn" class="button">Logout</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="main manage-points" role="main">
-        <div class="main__container">
-            <section class="content-section">
-                <h2>Manage Spirit Points</h2>
-                
-                <div class="chart-container">
-                    <h3>Current Spirit Points</h3>
-                    <div class="chart">
-                        <div class="bar-container">
-                            <div class="bar-wrapper">
-                                <div class="bar freshmen" data-class="Freshmen"></div>
-                            </div>
-                            <div class="bar-label">Freshmen</div>
+    <main class="manage-points-container">
+        <div class="chart-section">
+            <h2>Current Spirit Points</h2>
+            <div class="chart-container">
+                <div class="chart">
+                    <div class="bar-container">
+                        <div class="bar-wrapper">
+                            <div class="bar freshmen" data-class="Freshmen"></div>
                         </div>
-                        <div class="bar-container">
-                            <div class="bar-wrapper">
-                                <div class="bar sophomores" data-class="Sophomores"></div>
-                            </div>
-                            <div class="bar-label">Sophomores</div>
+                        <div class="bar-label">Freshmen</div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-wrapper">
+                            <div class="bar sophomores" data-class="Sophomores"></div>
                         </div>
-                        <div class="bar-container">
-                            <div class="bar-wrapper">
-                                <div class="bar juniors" data-class="Juniors"></div>
-                            </div>
-                            <div class="bar-label">Juniors</div>
+                        <div class="bar-label">Sophomores</div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-wrapper">
+                            <div class="bar juniors" data-class="Juniors"></div>
                         </div>
-                        <div class="bar-container">
-                            <div class="bar-wrapper">
-                                <div class="bar seniors" data-class="Seniors"></div>
-                            </div>
-                            <div class="bar-label">Seniors</div>
+                        <div class="bar-label">Juniors</div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-wrapper">
+                            <div class="bar seniors" data-class="Seniors"></div>
                         </div>
+                        <div class="bar-label">Seniors</div>
                     </div>
                 </div>
-
-                <div class="hierarchy-container">
-                    <div class="event-list">
-                        <h3>Events</h3>
-                        <ul id="event-list"></ul>
-                    </div>
-                    <div class="game-list hidden">
-                        <h3>Games</h3>
-                        <ul id="game-list"></ul>
-                    </div>
-                    <div class="point-form hidden">
-                        <h3>Update Points</h3>
-                        <form id="update-points-form">
-                            <div class="form-group">
-                                <label for="class-select">Select Class:</label>
-                                <select id="class-select" required>
-                                    <option value="Freshmen">Freshmen</option>
-                                    <option value="Sophomores">Sophomores</option>
-                                    <option value="Juniors">Juniors</option>
-                                    <option value="Seniors">Seniors</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="points-input">Points:</label>
-                                <input type="number" id="points-input" required>
-                            </div>
-                            <button type="submit">Update Points</button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <section class="content-section">
-                <h2>View Current Statistics</h2>
-                <div id="current-stats"></div>
-            </section>
+            </div>
+        </div>
+        <div class="points-management-section">
+            <h2>Manage Points</h2>
+            <div class="event-selection">
+                <label for="event-select">Select Event:</label>
+                <select id="event-select">
+                    <option value="">Choose an event</option>
+                </select>
+            </div>
+            <div id="games-list" class="games-list"></div>
+            <button id="update-points-btn" class="btn">Update Points</button>
         </div>
     </main>
 
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="auth-check.js"></script>
-    <script type="module" src="js/admin-points.js"></script>
+    <script src="js/admin-points.js" type="module"></script>
+    <script src="js/firebase-config.js" type="module"></script>
+    <script src="auth-check.js" type="module"></script>
     <script src="js/background-text.js"></script>
 </body>
 </html>

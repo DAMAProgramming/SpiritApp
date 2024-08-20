@@ -1,222 +1,193 @@
+// manage-points.js
+
 import { db, auth } from './firebase-config.js';
 import { doc, setDoc, getDoc, updateDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-let currentEventId = null;
-let currentGameId = null;
-
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOM fully loaded and parsed");
-
-    const updatePointsForm = document.getElementById('update-points-form');
+    // Initialize event listeners
     const logoutBtn = document.getElementById('logout-btn');
-    const classSelect = document.getElementById('class-select');
+    const eventSelect = document.getElementById('event-select');
+    const updatePointsBtn = document.getElementById('update-points-btn');
 
-    if (updatePointsForm) {
-        updatePointsForm.addEventListener('submit', handlePointsUpdate);
-    }
+    logoutBtn.addEventListener('click', handleLogout);
+    eventSelect.addEventListener('change', handleEventSelection);
+    updatePointsBtn.addEventListener('click', handlePointsUpdate);
 
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', handleLogout);
-    }
-
-    if (classSelect) {
-        classSelect.addEventListener('change', loadCurrentGamePoints);
-    }
-
-    // Load events
+    // Load initial data
     loadEvents();
-
-    // Load and display current statistics
-    loadCurrentStats();
-    updateChart(); // Initial chart update
+    updateChart();
 });
 
 async function loadEvents() {
-    const eventList = document.getElementById('event-list');
+    const eventSelect = document.getElementById('event-select');
     
     try {
         const eventsQuery = query(collection(db, 'events'), orderBy('date', 'desc'));
-        const querySnapshot = await getDocs(eventsQuery);
+        const snapshot = await getDocs(eventsQuery);
         
-        eventList.innerHTML = '';
+        eventSelect.innerHTML = '<option value="">Choose an event</option>';
         
-        querySnapshot.forEach((doc) => {
+        snapshot.forEach(doc => {
             const event = doc.data();
-            const li = document.createElement('li');
-            li.className = 'event-item';
-            li.textContent = `${event.name} (${event.date})`;
-            li.addEventListener('click', () => {
-                document.querySelectorAll('.event-item').forEach(item => item.classList.remove('selected'));
-                li.classList.add('selected');
-                loadGames(doc.id);
-            });
-            eventList.appendChild(li);
+            const option = document.createElement('option');
+            option.value = doc.id;
+            option.textContent = `${event.name} (${event.date})`;
+            eventSelect.appendChild(option);
         });
     } catch (error) {
-        console.error("Error loading events:", error);
+        console.error('Error loading events:', error);
         alert('Failed to load events. Please try again.');
     }
 }
 
-async function loadGames(eventId) {
-    currentEventId = eventId;
-    const gameList = document.getElementById('game-list');
-    const gameListContainer = document.querySelector('.game-list');
+async function handleEventSelection() {
+    const eventId = this.value;
+    const gamesList = document.getElementById('games-list');
     
-    try {
-        const gamesQuery = query(collection(db, 'events', eventId, 'games'), orderBy('date', 'asc'));
-        const querySnapshot = await getDocs(gamesQuery);
-        
-        gameList.innerHTML = '';
-        
-        querySnapshot.forEach((doc) => {
-            const game = doc.data();
-            const li = document.createElement('li');
-            li.className = 'game-item';
-            li.textContent = `${game.name} (${game.date})`;
-            li.addEventListener('click', () => {
-                document.querySelectorAll('.game-item').forEach(item => item.classList.remove('selected'));
-                li.classList.add('selected');
-                showPointForm(doc.id);
-            });
-            gameList.appendChild(li);
-        });
+    if (!eventId) {
+        gamesList.innerHTML = '';
+        return;
+    }
 
-        gameListContainer.classList.remove('hidden');
-        document.querySelector('.point-form').classList.add('hidden');
+    try {
+        const eventDoc = await getDoc(doc(db, 'events', eventId));
+        const event = eventDoc.data();
+        
+        let gamesHTML = '';
+        for (const gameId of event.games) {
+            const gameDoc = await getDoc(doc(db, 'games', gameId));
+            const game = gameDoc.data();
+            
+            gamesHTML += `
+                <div class="game-item" data-game-id="${gameId}">
+                    <h4>${game.name}</h4>
+                    <div class="class-points">
+                        <label>Freshmen:</label>
+                        <input type="number" class="points-input" data-class="Freshmen" min="0">
+                    </div>
+                    <div class="class-points">
+                        <label>Sophomores:</label>
+                        <input type="number" class="points-input" data-class="Sophomores" min="0">
+                    </div>
+                    <div class="class-points">
+                        <label>Juniors:</label>
+                        <input type="number" class="points-input" data-class="Juniors" min="0">
+                    </div>
+                    <div class="class-points">
+                        <label>Seniors:</label>
+                        <input type="number" class="points-input" data-class="Seniors" min="0">
+                    </div>
+                </div>
+            `;
+        }
+        
+        gamesList.innerHTML = gamesHTML;
+        
+        // Load existing points for this event
+        await loadExistingPoints(eventId);
     } catch (error) {
-        console.error("Error loading games:", error);
+        console.error('Error loading games:', error);
         alert('Failed to load games. Please try again.');
     }
 }
 
-function showPointForm(gameId) {
-    currentGameId = gameId;
-    document.querySelector('.point-form').classList.remove('hidden');
-    loadCurrentGamePoints();
-}
-
-async function loadCurrentGamePoints() {
-    if (!currentEventId || !currentGameId) return;
-
-    const classSelect = document.getElementById('class-select');
-    const pointsInput = document.getElementById('points-input');
-    const selectedClass = classSelect.value;
-
+async function loadExistingPoints(eventId) {
     try {
-        const gamePointsRef = doc(db, 'events', currentEventId, 'games', currentGameId, 'points', selectedClass);
-        const gamePointsDoc = await getDoc(gamePointsRef);
-        
-        if (gamePointsDoc.exists()) {
-            pointsInput.value = gamePointsDoc.data().points || 0;
-        } else {
-            pointsInput.value = 0;
-        }
+        const eventPointsRef = doc(db, 'eventPoints', eventId);
+        const eventPointsDoc = await getDoc(eventPointsRef);
+        const existingEventPoints = eventPointsDoc.exists() ? eventPointsDoc.data() : {};
+
+        const gameItems = document.querySelectorAll('.game-item');
+        gameItems.forEach(gameItem => {
+            const gameId = gameItem.dataset.gameId;
+            const inputs = gameItem.querySelectorAll('.points-input');
+            inputs.forEach(input => {
+                const className = input.dataset.class;
+                input.value = existingEventPoints[gameId]?.[className] || 0;
+            });
+        });
     } catch (error) {
-        console.error("Error fetching game points:", error);
-        alert('Failed to fetch game points. Please try again.');
+        console.error('Error loading existing points:', error);
     }
 }
 
-async function handlePointsUpdate(e) {
-    e.preventDefault();
-    console.log("Updating points");
-    
-    if (!currentEventId || !currentGameId) {
-        alert('Please select an event and a game.');
+async function handlePointsUpdate() {
+    const eventId = document.getElementById('event-select').value;
+    if (!eventId) {
+        alert('Please select an event.');
         return;
     }
 
-    const selectedClass = document.getElementById('class-select').value;
-    const points = parseInt(document.getElementById('points-input').value);
-
     try {
-        // Update game-specific points
-        const gamePointsRef = doc(db, 'events', currentEventId, 'games', currentGameId, 'points', selectedClass);
-        await setDoc(gamePointsRef, { points: points });
+        const gameItems = document.querySelectorAll('.game-item');
+        let eventPoints = {};
+        let pointsToAdd = {
+            Freshmen: 0,
+            Sophomores: 0,
+            Juniors: 0,
+            Seniors: 0
+        };
 
-        // Update event total points
-        const eventPointsRef = doc(db, 'events', currentEventId, 'points', selectedClass);
+        // Fetch existing event points
+        const eventPointsRef = doc(db, 'eventPoints', eventId);
         const eventPointsDoc = await getDoc(eventPointsRef);
-        const currentEventPoints = eventPointsDoc.exists() ? eventPointsDoc.data().points : 0;
-        await setDoc(eventPointsRef, { points: currentEventPoints + points });
+        const existingEventPoints = eventPointsDoc.exists() ? eventPointsDoc.data() : {};
 
-        // Update total points across all events
+        // Calculate points to add and update event points
+        for (const gameItem of gameItems) {
+            const gameId = gameItem.dataset.gameId;
+            const inputs = gameItem.querySelectorAll('.points-input');
+            eventPoints[gameId] = eventPoints[gameId] || {};
+
+            for (const input of inputs) {
+                const className = input.dataset.class;
+                const newPoints = parseInt(input.value) || 0;
+                const oldPoints = existingEventPoints[gameId]?.[className] || 0;
+                const pointsDifference = newPoints - oldPoints;
+
+                eventPoints[gameId][className] = newPoints;
+                pointsToAdd[className] += pointsDifference;
+            }
+        }
+
+        // Update event points
+        await setDoc(eventPointsRef, eventPoints);
+
+        // Fetch current total points
         const totalPointsRef = doc(db, 'spiritPoints', 'classes');
         const totalPointsDoc = await getDoc(totalPointsRef);
-        const currentTotalPoints = totalPointsDoc.data() || {};
-        const updatedTotalPoints = {
-            ...currentTotalPoints,
-            [selectedClass]: (currentTotalPoints[selectedClass] || 0) + points
+        const currentTotalPoints = totalPointsDoc.exists() ? totalPointsDoc.data() : {
+            Freshmen: 0,
+            Sophomores: 0,
+            Juniors: 0,
+            Seniors: 0
         };
-        await setDoc(totalPointsRef, updatedTotalPoints);
-        
-        console.log("Points updated successfully");
+
+        // Calculate new total points
+        const newTotalPoints = {};
+        for (const className in currentTotalPoints) {
+            newTotalPoints[className] = currentTotalPoints[className] + pointsToAdd[className];
+        }
+
+        // Update total points
+        await updateDoc(totalPointsRef, newTotalPoints);
+
         alert('Points updated successfully!');
-        loadCurrentStats(); // Reload stats after update
-        updateChart(); // Update the chart
+        updateChart();
     } catch (error) {
-        console.error("Error updating points: ", error);
+        console.error('Error updating points:', error);
         alert('Failed to update points. Please try again.');
     }
 }
 
-async function loadCurrentStats() {
-    const currentStatsDiv = document.getElementById('current-stats');
-    const selectedClass = document.getElementById('class-select').value;
-    
-    try {
-        const pointsRef = doc(db, 'spiritPoints', 'classes');
-        const statsRef = doc(db, 'spiritPoints', 'statistics');
-        
-        const [pointsDoc, statsDoc] = await Promise.all([
-            getDoc(pointsRef),
-            getDoc(statsRef)
-        ]);
-
-        const pointsData = pointsDoc.exists() ? pointsDoc.data() : {};
-        const statsData = statsDoc.exists() ? statsDoc.data() : {};
-
-        let statsHTML = '';
-        const classesToShow = ['Freshmen', 'Sophomores', 'Juniors', 'Seniors'];
-
-        for (const className of classesToShow) {
-            const classStats = statsData[className] || {};
-            statsHTML += `
-                <div class="class-stats">
-                    <h3>${className}</h3>
-                    <p>Current Points: ${pointsData[className] || 0}</p>
-                    <p>Win Streak: ${classStats.winStreak || 0}</p>
-                    <p>Total Wins: ${classStats.totalWins || 0}</p>
-                    <p>Last Event Won: ${classStats.lastEventWon || 'N/A'}</p>
-                    <p>MVPs: ${(classStats.MVPs || []).join(', ') || 'None'}</p>
-                </div>
-            `;
-        }
-
-        currentStatsDiv.innerHTML = statsHTML;
-
-        // Populate the form fields for the selected class
-        const classStats = statsData[selectedClass] || {};
-        document.getElementById('points-input').value = pointsData[selectedClass] || 0;
-    } catch (error) {
-        console.error("Error loading current stats: ", error);
-        currentStatsDiv.innerHTML = '<p>Error loading statistics. Please try again later.</p>';
-    }
-}
-
 async function updateChart() {
-    console.log("Updating chart");
-    
     try {
         const pointsRef = doc(db, 'spiritPoints', 'classes');
         const pointsDoc = await getDoc(pointsRef);
         
         if (pointsDoc.exists()) {
             const pointsData = pointsDoc.data();
-            console.log("Points data:", pointsData);
-            
             const maxPoints = Math.max(...Object.values(pointsData));
             
             for (const [className, points] of Object.entries(pointsData)) {
@@ -225,30 +196,27 @@ async function updateChart() {
                     const percentage = maxPoints > 0 ? (points / maxPoints) * 100 : 0;
                     bar.style.height = `${percentage}%`;
                     
-                    // Update or create points display
+                    // Add or update the points display
                     let pointsDisplay = bar.querySelector('.points-display');
                     if (!pointsDisplay) {
                         pointsDisplay = document.createElement('div');
                         pointsDisplay.className = 'points-display';
                         bar.appendChild(pointsDisplay);
                     }
-                    pointsDisplay.textContent = points;
+                    bar.textContent = points;
                 }
             }
-        } else {
-            console.log("No points data found");
         }
     } catch (error) {
-        console.error("Error updating chart:", error);
+        console.error('Error updating chart:', error);
     }
 }
 
 function handleLogout(e) {
     e.preventDefault();
-    console.log("Logout button clicked");
     signOut(auth).then(() => {
-        console.log("User signed out successfully");
-        window.location.href = '/login.html';
+        console.log('User signed out successfully');
+        window.location.href = './login.html';
     }).catch((error) => {
         console.error('Sign out error:', error);
     });

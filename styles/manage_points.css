@@ -1,28 +1,344 @@
+/* manage-points.css */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+:root {
+    --background-color: #ffffff;
+    --text-color: #333333;
+    --primary-color: #1eb400;
+    --secondary-color: #0056b3;
+    --accent-color: #ffc107;
+    --border-color: #dee2e6;
+    --navbar-bg: rgba(255, 255, 255, 0.9);
+    --button-text: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Navbar Styles */
+.navbar {
+    background: var(--navbar-bg);
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar__container {
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    z-index: 1;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 50px;
+}
+
+#navbar__logo {
+    background-color: var(--primary-color);
+    background-image: linear-gradient(to top, var(--primary-color) 0%, #21d4fd 100%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.navbar__menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
     text-align: center;
 }
 
-input[type="text"], input[type="number"], textarea {
-    width: 90%;
+.navbar__item {
+    height: 80px;
+}
+
+.navbar__links {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+}
+
+.navbar__links:hover {
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+/* Main Content Styles */
+.manage-points-container {
+    display: flex;
+    height: calc(100vh - 80px); /* Adjust based on your navbar height */
+    overflow: hidden;
+}
+
+.chart-section {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.points-management-section {
+    flex: 1;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-left: 1px solid var(--border-color);
+    overflow-y: auto;
+}
+
+.chart-container {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 300px;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+}
+
+.bar-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.bar {
+    width: 100%;
+    transition: height 0.5s ease-in-out;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.points-display {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.bar.freshmen { background-color: #f0f0f0; }
+.bar.sophomores { background-color: #333333; }
+.bar.juniors { background-color: #ffe81c; }
+.bar.seniors { background-color: #4dc905; }
+
+.bar-label {
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.event-selection {
+    margin-bottom: 20px;
+}
+
+.games-list {
+    margin-bottom: 20px;
+}
+
+.game-item {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.game-item h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.class-points {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.class-points label {
+    flex: 1;
+}
+
+.class-points input {
+    width: 60px;
+    margin-left: 10px;
+}
+
+/* Form Styles */
+input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea, select {
+    width: 100%;
     padding: 10px;
     margin: 10px 0;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
     box-sizing: border-box;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
 }
 
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
+button[type="submit"], .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--button-text);
     border: none;
+    border-radius: 4px;
     cursor: pointer;
-    width: 90%;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
-button:hover {
-    opacity: 0.8;
+button[type="submit"]:hover, .btn:hover {
+    background-color: #178f00;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 960px) {
+    .navbar__container {
+        padding: 0;
+    }
+
+    .navbar__menu {
+        display: grid;
+        grid-template-columns: auto;
+        margin: 0;
+        width: 100%;
+        position: absolute;
+        top: -1000px;
+        opacity: 0;
+        transition: all 0.5s ease;
+        height: 50vh;
+        z-index: -1;
+        background: var(--navbar-bg);
+    }
+
+    .navbar__menu.active {
+        top: 100%;
+        opacity: 1;
+        transition: all 0.5s ease;
+        z-index: 99;
+        height: 50vh;
+        font-size: 1.6rem;
+    }
+
+    #navbar__logo {
+        padding-left: 25px;
+    }
+
+    .navbar__toggle .bar {
+        width: 25px;
+        height: 3px;
+        margin: 5px auto;
+        transition: all 0.3s ease-in-out;
+        background: var(--text-color);
+    }
+
+    .navbar__item {
+        width: 100%;
+    }
+
+    .navbar__links {
+        text-align: center;
+        padding: 2rem;
+        width: 100%;
+        display: table;
+    }
+
+    #mobile-menu {
+        position: absolute;
+        top: 20%;
+        right: 5%;
+        transform: translate(5%, 20%);
+    }
+
+    .navbar__toggle .bar {
+        display: block;
+        cursor: pointer;
+    }
+
+    #mobile-menu.is-active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    #mobile-menu.is-active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    #mobile-menu.is-active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .manage-points-container {
+        flex-direction: column;
+    }
+
+    .chart-section, .points-management-section {
+        flex: none;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .manage-points-container {
+        height: auto;
+        overflow: visible;
+    }
+
+    .chart-section, .points-management-section {
+        overflow-y: visible;
+    }
 }
