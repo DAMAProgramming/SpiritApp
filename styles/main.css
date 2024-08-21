@@ -3,15 +3,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
 :root {
-  --background-color: #ffffff;
-  --text-color: #333333;
-  --primary-color: #1eb400;
-  --secondary-color: #0056b3;
-  --accent-color: #ffc107;
-  --border-color: #dee2e6;
-  --navbar-bg: rgba(255, 255, 255, 0.9);
-  --button-text: #ffffff;
-  --bg-text-color: #c9c9c9;
+    --background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    --text-color: #333333;
+    --primary-color: #1eb400;
+    --secondary-color: #0056b3;
+    --accent-color: #ffc107;
+    --border-color: #dee2e6;
+    --navbar-bg: rgba(255, 255, 255, 0.9); /* Semi-transparent white for navbar */
+    --button-text: #ffffff;
+    --bg-text-color: #c9c9c9;
+    --footer-bg: rgba(248, 249, 250, 0.9); /* Semi-transparent light gray for footer */
 }
 
 * {
@@ -41,7 +42,7 @@ body {
     font-size: 1.2rem;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 10;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -49,7 +50,7 @@ body {
     display: flex;
     justify-content: space-between;
     height: 80px;
-    z-index: 1;
+    z-index: 10;
     width: 100%;
     max-width: 1300px;
     margin: 0 auto;
@@ -133,7 +134,7 @@ body {
         display: flex;
         justify-content: space-between;
         height: 80px;
-        z-index: 1;
+        z-index: 2;
         width: 100%;
         max-width: 1300px;
         padding: 0;
@@ -225,7 +226,8 @@ body {
 
 /* Main Content Styles */
 .main {
-    background-color: var(--background-color);
+    position: relative;
+    z-index: 1;
 }
 
 .main__container {
@@ -238,7 +240,7 @@ body {
     min-height: 90vh;
     padding: 50px 20px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 .content-section {
@@ -529,6 +531,7 @@ button[type="submit"]:hover, .btn:hover {
     padding: 40px 0 20px;
     font-size: 14px;
     border-top: 1px solid var(--border-color);
+    z-index: 2;
 }
 
 .footer__container {
