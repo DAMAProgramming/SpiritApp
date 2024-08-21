@@ -1,16 +1,17 @@
+// Import necessary Firebase modules
 import { db } from './firebase-config.js';
 import { collection, getDocs, query, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 let eventsData = [];
+let lineChart;
 
 document.addEventListener('DOMContentLoaded', function() {
     loadEvents();
-    loadEventHistory();
-
+    
     const eventSelect = document.getElementById('event-select');
     if (eventSelect) {
         eventSelect.addEventListener('change', function() {
-            updateChart(this.value);
+            updateCharts(this.value);
         });
     } else {
         console.error("Element with id 'event-select' not found");
@@ -25,8 +26,7 @@ async function loadEvents() {
     }
     
     try {
-        // Query events ordered by date in descending order
-        const eventsQuery = query(collection(db, 'events'), orderBy('date', 'desc'));
+        const eventsQuery = query(collection(db, 'events'), orderBy('date', 'asc'));
         const snapshot = await getDocs(eventsQuery);
         
         eventsData = [];
@@ -35,98 +35,153 @@ async function loadEvents() {
             eventsData.push({ id: doc.id, ...event });
         });
 
-        // Reverse eventsData array to have oldest first for cumulative calculations
-        eventsData.reverse();
-
-        // Clear existing options
         eventSelect.innerHTML = '<option value="all">All Events</option>';
-
-        // Add event options in reverse order (latest first)
-        for (let i = eventsData.length - 1; i >= 0; i--) {
-            const event = eventsData[i];
+        eventsData.forEach(event => {
             const option = document.createElement('option');
             option.value = event.id;
             option.textContent = `${event.name} (${event.date})`;
             eventSelect.appendChild(option);
-        }
+        });
 
-        // Initial chart load with all events
-        updateChart('all');
+        updateCharts('all');
     } catch (error) {
         console.error('Error loading events:', error);
     }
 }
 
-async function updateChart(selectedEventId) {
-    const chartContainer = document.querySelector('.chart-container');
-    chartContainer.innerHTML = ''; // Clear previous chart
-
-    const classes = ['Freshmen', 'Sophomores', 'Juniors', 'Seniors'];
-    let cumulativePoints = {
-        Freshmen: 0,
-        Sophomores: 0,
-        Juniors: 0,
-        Seniors: 0
-    };
-
+async function updateCharts(selectedEventId) {
     try {
-        for (const event of eventsData) {
-            const eventPointsDoc = await getDoc(doc(db, 'eventPoints', event.id));
-            const eventPoints = eventPointsDoc.exists() ? eventPointsDoc.data() : {};
-            
-            classes.forEach(className => {
-                cumulativePoints[className] += eventPoints[className] || 0;
-            });
+        const { labels, datasets } = await getChartData(selectedEventId);
+        updateBarChart(datasets);
+        updateLineGraph(labels, datasets);
+        updateEventDetails(selectedEventId, Object.fromEntries(datasets.map((ds, i) => [ds.label, ds.data[ds.data.length - 1]])));
+    } catch (error) {
+        console.error('Error updating charts:', error);
+    }
+}
 
-            if (event.id === selectedEventId) break;
-        }
+async function getChartData(selectedEventId) {
+    const classes = ['Freshmen', 'Sophomores', 'Juniors', 'Seniors'];
+    const datasets = classes.map(className => ({
+        label: className,
+        data: [],
+        fill: false,
+        borderColor: getClassColor(className),
+        tension: 0.1
+    }));
 
-        if (selectedEventId === 'all') {
-            // We've already calculated all points, so we can proceed
-        } else if (!eventsData.some(event => event.id === selectedEventId)) {
-            throw new Error('Selected event not found');
-        }
+    let cumulativePoints = { Freshmen: 0, Sophomores: 0, Juniors: 0, Seniors: 0 };
+    const labels = [];
 
-        const maxPoints = Math.max(...Object.values(cumulativePoints));
-
-        const chart = document.createElement('div');
-        chart.className = 'chart';
+    for (const event of eventsData) {
+        const eventPointsDoc = await getDoc(doc(db, 'eventPoints', event.id));
+        const eventPoints = eventPointsDoc.exists() ? eventPointsDoc.data() : {};
         
-        classes.forEach(className => {
-            const points = cumulativePoints[className];
-            const percentage = maxPoints > 0 ? (points / maxPoints) * 100 : 0;
+        for (const className in cumulativePoints) {
+            let eventTotalPoints = 0;
+            for (const gameId in eventPoints) {
+                eventTotalPoints += eventPoints[gameId][className] || 0;
+            }
+            cumulativePoints[className] += eventTotalPoints;
+        }
 
-            const barContainer = document.createElement('div');
-            barContainer.className = 'bar-container';
-
-            const barWrapper = document.createElement('div');
-            barWrapper.className = 'bar-wrapper';
-
-            const bar = document.createElement('div');
-            bar.className = `bar ${className.toLowerCase()}`;
-            bar.style.height = `${percentage}%`;
-
-            const pointsDisplay = document.createElement('div');
-            pointsDisplay.className = 'points-display';
-            pointsDisplay.textContent = points;
-
-            bar.appendChild(pointsDisplay);
-            barWrapper.appendChild(bar);
-            barContainer.appendChild(barWrapper);
-
-            const barLabel = document.createElement('div');
-            barLabel.className = 'bar-label';
-            barLabel.textContent = className;
-            barContainer.appendChild(barLabel);
-
-            chart.appendChild(barContainer);
+        labels.push(event.name);
+        classes.forEach((className, index) => {
+            datasets[index].data.push(cumulativePoints[className]);
         });
 
-        chartContainer.appendChild(chart);
-        updateEventDetails(selectedEventId, cumulativePoints);
-    } catch (error) {
-        console.error('Error updating chart:', error);
-        chartContainer.innerHTML = '<p>Error updating chart. Please try again.</p>';
+        if (event.id === selectedEventId) break;
+    }
+
+    return { labels, datasets };
+}
+
+function updateBarChart(datasets) {
+    const chartContainer = document.querySelector('.chart-container .chart');
+    if (!chartContainer) {
+        console.error("Chart container not found");
+        return;
+    }
+
+    chartContainer.innerHTML = ''; // Clear existing content
+
+    const maxPoints = Math.max(...datasets.map(ds => ds.data[ds.data.length - 1]));
+
+    datasets.forEach((dataset, index) => {
+        const points = dataset.data[dataset.data.length - 1];
+        const percentage = maxPoints > 0 ? (points / maxPoints) * 100 : 0;
+
+        const barContainer = document.createElement('div');
+        barContainer.className = 'bar-container';
+
+        const barWrapper = document.createElement('div');
+        barWrapper.className = 'bar-wrapper';
+
+        const bar = document.createElement('div');
+        bar.className = `bar ${dataset.label.toLowerCase()}`;
+        bar.style.height = `${percentage}%`;
+
+        const pointsDisplay = document.createElement('div');
+        pointsDisplay.className = 'points-display';
+        pointsDisplay.textContent = points;
+
+        bar.appendChild(pointsDisplay);
+        barWrapper.appendChild(bar);
+        barContainer.appendChild(barWrapper);
+
+        const barLabel = document.createElement('div');
+        barLabel.className = 'bar-label';
+        barLabel.textContent = dataset.label;
+        barContainer.appendChild(barLabel);
+
+        chartContainer.appendChild(barContainer);
+    });
+}
+
+function updateLineGraph(labels, datasets) {
+    const canvas = document.getElementById('event-history');
+    if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
+        console.error("Canvas element 'event-history' not found or is not a canvas");
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    
+    if (lineChart) {
+        lineChart.destroy();
+    }
+
+    lineChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Cumulative Points' }
+                },
+                x: {
+                    title: { display: true, text: 'Events' }
+                }
+            },
+            plugins: {
+                title: { display: true, text: 'Cumulative Points Over Time' },
+                tooltip: { mode: 'index', intersect: false },
+                legend: { position: 'bottom' }
+            },
+            interaction: { mode: 'nearest', axis: 'x', intersect: false }
+        }
+    });
+}
+
+function getClassColor(className) {
+    switch(className) {
+        case 'Freshmen': return '#f0f0f0';
+        case 'Sophomores': return '#333333';
+        case 'Juniors': return '#ffe81c';
+        case 'Seniors': return '#4dc905';
+        default: return '#000000';
     }
 }
 
@@ -145,46 +200,5 @@ function updateEventDetails(selectedEventId, pointsData) {
         detailsHTML += '</ul>';
 
         eventDetails.innerHTML = detailsHTML;
-    }
-}
-
-async function loadEventHistory() {
-    const eventHistory = document.getElementById('event-history');
-    
-    try {
-        let historyHTML = '<table><tr><th>Event</th><th>Date</th><th>Freshmen</th><th>Sophomores</th><th>Juniors</th><th>Seniors</th></tr>';
-        
-        let cumulativePoints = {
-            Freshmen: 0,
-            Sophomores: 0,
-            Juniors: 0,
-            Seniors: 0
-        };
-
-        for (const event of eventsData) {
-            const eventPointsDoc = await getDoc(doc(db, 'eventPoints', event.id));
-            const eventPoints = eventPointsDoc.exists() ? eventPointsDoc.data() : {};
-            
-            for (const className in cumulativePoints) {
-                cumulativePoints[className] += eventPoints[className] || 0;
-            }
-
-            historyHTML += `
-                <tr>
-                    <td>${event.name}</td>
-                    <td>${event.date}</td>
-                    <td>${cumulativePoints.Freshmen}</td>
-                    <td>${cumulativePoints.Sophomores}</td>
-                    <td>${cumulativePoints.Juniors}</td>
-                    <td>${cumulativePoints.Seniors}</td>
-                </tr>
-            `;
-        }
-        
-        historyHTML += '</table>';
-        eventHistory.innerHTML = historyHTML;
-    } catch (error) {
-        console.error('Error loading event history:', error);
-        eventHistory.innerHTML = '<p>Error loading event history.</p>';
     }
 }

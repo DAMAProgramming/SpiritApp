@@ -28,7 +28,7 @@
         </div>
     </nav>
 
-    <main class="manage-points-container">
+    <div class="manage-points-container" role="main">
         <div class="chart-section">
             <h2>Current Spirit Points</h2>
             <div class="chart-container">
@@ -59,6 +59,10 @@
                     </div>
                 </div>
             </div>
+            <div class="content-section">
+                <h3>Event History</h3>
+                <canvas id="event-history"></canvas>
+            </div>
         </div>
         <div class="points-management-section">
             <h2>Manage Points</h2>
@@ -71,10 +75,11 @@
             <div id="games-list" class="games-list"></div>
             <button id="update-points-btn" class="btn">Update Points</button>
         </div>
-    </main>
+    </div>
 
-    <script src="js/admin-points.js" type="module"></script>
     <script src="js/firebase-config.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/admin-points.js" type="module"></script>
     <script src="auth-check.js" type="module"></script>
     <script src="js/background-text.js"></script>
     <script src="js/resize-panel.js"></script>

@@ -37,7 +37,7 @@ body {
     font-size: 1.2rem;
     position: sticky;
     top: 0;
-    z-index: 1000; /* Ensure navbar is above everything */
+    z-index: 1000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -97,29 +97,39 @@ body {
 /* Main Content Styles */
 .manage-points-container {
     display: flex;
-    height: calc(100vh - 80px); /* Adjust based on your navbar height */
+    height: calc(100vh - 80px);
     overflow: hidden;
-    position: relative; /* Add this to create a new stacking context */
-    z-index: 1; /* Ensure it's above the background text */
+    position: relative;
+    z-index: 1;
 }
 
 .chart-section {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
-    position: relative; /* Add this to create a new stacking context */
-    z-index: 2; /* Ensure it's above the background text */
-    width: 60%;
+    position: relative;
+    z-index: 2;
 }
 
 .points-management-section {
-    width: 40%;
+    width: 300px;
     padding: 20px;
     background-color: #f8f9fa;
     border-left: 1px solid var(--border-color);
     overflow-y: auto;
-    position: relative; /* Add this to create a new stacking context */
-    z-index: 2; /* Ensure it's above the background text */
+    position: relative;
+    z-index: 2;
+}
+
+.resizer {
+    width: 10px;
+    background-color: var(--border-color);
+    cursor: col-resize;
+    transition: background-color 0.3s ease;
+}
+
+.resizer:hover, .resizer.active {
+    background-color: var(--primary-color);
 }
 
 .chart-container {
@@ -127,31 +137,32 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 20px;
-    margin-top: 20px;
-    position: relative; /* Add this to create a new stacking context */
-    z-index: 3; /* Ensure it's above the background text */
+    margin-bottom: 20px;
+    height: 400px;
+    position: relative;
 }
 
 .chart {
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
-    height: 300px;
-    position: relative; /* Add this to create a new stacking context */
+    height: 100%;
+    width: 100%;
 }
 
 .bar-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 80%;
     width: 60px;
 }
 
 .bar-wrapper {
-    height: 100%;
+    height: 80%;
+    width: 100%;
     display: flex;
     align-items: flex-end;
-    width: 100%;
 }
 
 .bar {
@@ -161,26 +172,26 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    z-index: 4; /* Ensure bars are above the background text */
-}
-
-.points-display {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-size: 12px;
-    white-space: nowrap;
+    min-height: 1px; /* Ensure bar is always visible */
 }
 
 .bar.freshmen { background-color: #f0f0f0; }
 .bar.sophomores { background-color: #333333; }
 .bar.juniors { background-color: #ffe81c; }
 .bar.seniors { background-color: #4dc905; }
+
+.points-display {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: black;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+    font-weight: bold;
+}
 
 .bar-label {
     margin-top: 10px;
@@ -253,6 +264,16 @@ button[type="submit"], .btn {
 
 button[type="submit"]:hover, .btn:hover {
     background-color: #178f00;
+}
+
+/* Styles for the line graph */
+.content-section {
+    margin-bottom: 20px;
+}
+
+#event-history {
+    width: 100%;
+    height: 400px;
 }
 
 /* Responsive Design */
@@ -336,35 +357,35 @@ button[type="submit"]:hover, .btn:hover {
     }
 
     .chart-section, .points-management-section {
-        flex: none;
+        flex: 1 1 100%;
         width: 100%;
     }
 }
 
 @media screen and (max-width: 768px) {
     .manage-points-container {
-        height: auto;
-        overflow: visible;
+        flex-direction: column;
     }
 
-    .chart-section, .points-management-section {
-        overflow-y: visible;
+    .chart-section {
+        flex: none;
+        height: 50%;
+    }
+
+    .points-management-section {
+        width: 100%;
+        height: 50%;
+    }
+
+    .resizer {
+        width: 100%;
+        height: 10px;
+        cursor: row-resize;
     }
 }
 
 .background-text {
-    z-index: 0; /* Ensure background text is behind most elements */
-}
-
-.resizer {
-    width: 10px;
-    background-color: var(--border-color);
-    cursor: col-resize;
-    transition: background-color 0.3s ease;
-}
-
-.resizer:hover, .resizer.active {
-    background-color: var(--primary-color);
+    z-index: 0;
 }
 
 .no-select {
@@ -373,3 +394,4 @@ button[type="submit"]:hover, .btn:hover {
     -moz-user-select: none;
     -ms-user-select: none;
 }
+
