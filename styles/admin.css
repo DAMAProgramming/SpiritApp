@@ -92,7 +92,7 @@ select {
 }
 
 /* Button styles */
-.btn, button[type="submit"] {
+.btn2, button[type="submit"] {
     display: inline-block;
     padding: 10px 20px;
     background-color: var(--primary-color);
@@ -104,7 +104,7 @@ select {
     transition: background-color 0.3s;
 }
 
-.btn:hover, button[type="submit"]:hover {
+.btn2:hover, button[type="submit"]:hover {
     background-color: #178f00;
 }
 
