@@ -71,6 +71,8 @@ body {
     text-decoration: none;
     font-size: 2rem;
     font-weight: bold;
+    /* Add transition for smooth size change */
+    transition: font-size 0.3s ease;
 }
 
 .navbar__menu {
@@ -165,7 +167,10 @@ body {
 
     #navbar__logo {
         padding-left: 25px;
-        padding-right: 50px;
+        /* Remove padding-right to allow more space */
+        /* padding-right: 50px; */
+        /* Adjust font size for smaller screens */
+        font-size: 1.5rem;
     }
 
     .navbar__toggle .toggle__line {
@@ -222,6 +227,23 @@ body {
 
     #mobile-menu.is-active .toggle__line:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #navbar__logo {
+        /* Further reduce font size for very small screens */
+        font-size: 1.2rem;
+    }
+
+    /* Adjust padding to give more space to the logo */
+    .navbar__container {
+        padding: 0 10px;
+    }
+
+    /* Reduce the size of the toggle button */
+    #mobile-menu {
+        transform: scale(0.8);
     }
 }
 
