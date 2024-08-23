@@ -140,7 +140,7 @@ body {
         z-index: 2;
         width: 100%;
         max-width: 1300px;
-        padding: 0 20px; /* Add some padding on the sides */
+        padding: 0 15px 0 20px;
     }
 
     .navbar__menu {
@@ -176,7 +176,7 @@ body {
     .navbar__toggle .toggle__line {
         width: 25px;
         height: 3px;
-        margin: 5px auto;
+        margin: 3px auto;
         transition: all 0.3s ease-in-out;
         background: var(--text-color);
     }
@@ -195,12 +195,15 @@ body {
     }
 
     #mobile-menu {
-        position: relative; /* Change to relative positioning */
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         cursor: pointer;
-        height: 40px; /* Set a fixed height */
+        height: 40px;
+        width: 30px;
+        margin-right: 10px; /* Add right margin to move button left */
     }
 
     .navbar__btn {
@@ -221,7 +224,7 @@ body {
     }
 
     #mobile-menu.is-active .toggle__line:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
+        transform: translateY(9px) rotate(45deg);
     }
 
     #mobile-menu.is-active .toggle__line:nth-child(3) {
