@@ -135,11 +135,12 @@ body {
     .navbar__container {
         display: flex;
         justify-content: space-between;
+        align-items: center; /* Center items vertically */
         height: 80px;
         z-index: 2;
         width: 100%;
         max-width: 1300px;
-        padding: 0;
+        padding: 0 20px; /* Add some padding on the sides */
     }
 
     .navbar__menu {
@@ -151,25 +152,24 @@ body {
         top: -1000px;
         opacity: 0;
         transition: all 0.5s ease;
-        height: 50vh;
+        height: auto; /* Change to auto to accommodate content */
         z-index: -1;
         background: var(--navbar-bg);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px 0; /* Add some vertical padding */
     }
 
     .navbar__menu.active {
-        top: 100%;
+        top: 80px; /* Position right below the navbar */
         opacity: 1;
         transition: all 0.5s ease;
         z-index: 99;
-        height: 50vh;
+        height: auto;
         font-size: 1.6rem;
     }
 
     #navbar__logo {
-        padding-left: 25px;
-        /* Remove padding-right to allow more space */
-        /* padding-right: 50px; */
-        /* Adjust font size for smaller screens */
+        padding-left: 0; /* Remove left padding */
         font-size: 1.5rem;
     }
 
@@ -183,38 +183,37 @@ body {
 
     .navbar__item {
         width: 100%;
+        padding: 10px 0; /* Add vertical padding to each item */
     }
 
     .navbar__links {
         text-align: center;
-        padding: 2rem;
-        width: 60%;
-        display: table;
+        width: 100%;
+        display: block; /* Change to block for full width */
+        padding: 1rem;
+        transition: all 0.3s ease;
     }
 
     #mobile-menu {
-        position: absolute;
-        top: 20%;
-        right: 5%;
-        transform: translate(5%, 20%);
+        position: relative; /* Change to relative positioning */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        cursor: pointer;
+        height: 40px; /* Set a fixed height */
     }
 
     .navbar__btn {
-        padding-bottom: 2rem;
+        padding-bottom: 1rem;
+        width: auto; /* Allow the button to size based on content */
+        margin: 0 auto; /* Center the button */
     }
 
     .button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 80%;
-        height: 80px;
-        margin: 0;
-    }
-
-    .navbar__toggle .toggle__line {
-        display: block;
-        cursor: pointer;
+        display: inline-block; /* Change to inline-block */
+        width: auto; /* Allow the button to size based on content */
+        padding: 10px 20px;
+        font-size: 1rem;
     }
 
     #mobile-menu.is-active .toggle__line:nth-child(2) {
