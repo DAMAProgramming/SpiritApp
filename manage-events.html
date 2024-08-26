@@ -45,30 +45,24 @@
     <main class="main manage-games-events" role="main">
         <div class="main__container">
             <section class="section content-section">
-                <h2>Manage Games</h2>
-                <form id="add-game-form">
+                <h2>Manage Events</h2>
+                <form id="add-event-form">
                     <div class="form-group">
-                        <label for="game-name">Game Name:</label>
-                        <input type="text" id="game-name" required>
+                        <label for="event-name">Event Name:</label>
+                        <input type="text" id="event-name" required>
                     </div>
                     <div class="form-group">
-                        <label for="game-description">Description:</label>
-                        <textarea id="game-description" required></textarea>
+                        <label for="event-date">Event Date:</label>
+                        <input type="date" id="event-date" required>
                     </div>
-                    <!-- New video upload field -->
                     <div class="form-group">
-                        <label for="game-video">Upload Video:</label>
-                        <input type="file" id="game-video" accept="video/*">
+                        <label for="event-games">Select Games:</label>
+                        <select id="event-games" multiple="multiple" style="width: 100%;" required></select>
                     </div>
-                    <!-- New YouTube link field -->
-                    <div class="form-group">
-                        <label for="game-youtube-link">YouTube Link:</label>
-                        <input type="url" id="game-youtube-link" placeholder="https://www.youtube.com/watch?v=...">
-                    </div>
-                    <button type="submit">Add Game</button>
+                    <button type="submit" class="btn">Add Event</button>
                 </form>
-                <h3>Existing Games</h3>
-                <ul id="games-list" class="item-list"></ul>
+                <h3>Existing Events</h3>
+                <ul id="events-list" class="item-list"></ul>
             </section>
         </div>
     </main>
@@ -79,7 +73,7 @@
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="auth-check.js"></script>
-    <script type="module" src="js/manage-games.js"></script>
+    <script type="module" src="js/manage-events.js"></script>
     <script src="js/background-text.js"></script>
 </body>
 </html>
