@@ -42,7 +42,8 @@ body {
     font-size: 1.2rem;
     position: sticky;
     top: 0;
-    z-index: 10;
+    position: relative;  /* Add this to create a new stacking context */
+    z-index: 10;  /* Ensure navbar is above other elements */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -261,20 +262,26 @@ body {
     background-color: var(--navbar-bg);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 0 0 4px 4px;
-    z-index: 1000;
+    z-index: 5;
     min-width: 200px;
-    padding: 0;
+    padding: 10px 0;
     list-style-type: none;
     overflow: hidden;
-    max-height: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    visibility: hidden;
     opacity: 0;
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+    height: auto;
+    pointer-events: none;
+    transform: translateY(-10px);
+    will-change: transform, opacity, visibility;
 }
 
-.navbar__dropdown:hover .dropdown__menu {
-    max-height: 300px; /* Adjust this value based on your content */
+.navbar__dropdown:hover .dropdown__menu,
+.navbar__dropdown.active .dropdown__menu {
+    visibility: visible;
     opacity: 1;
-    padding: 10px 0;
+    pointer-events: auto;
+    transform: translateY(0);
 }
 
 .dropdown__link {
@@ -290,12 +297,33 @@ body {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+.dropdown__menu .button {
+    display: block;
+    padding: 12px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.dropdown__menu .button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure consistency in mobile view */
+@media screen and (max-width: 960px) {
+    .dropdown__menu .button {
+        padding: 15px 30px;
+    }
+}
+
 /* Mobile menu adjustments */
 @media screen and (max-width: 960px) {
-    .navbar__menu {
-        flex-direction: column;
-    }
-
     .navbar__dropdown {
         width: 100%;
     }
@@ -304,18 +332,78 @@ body {
         position: static;
         width: 100%;
         box-shadow: none;
+        transform: none;
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
         max-height: 0;
-        opacity: 0;
-        transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+        padding: 0;
     }
 
     .navbar__dropdown.active .dropdown__menu {
-        max-height: 300px; /* Adjust this value based on your content */
-        opacity: 1;
+        max-height: 1000px; /* Adjust based on your content */
+        padding: 10px 0;
     }
 
     .dropdown__link {
         padding: 15px 30px;
+    }
+}
+
+/* Safari-specific optimizations */
+@supports (-webkit-touch-callout: none) {
+    .dropdown__menu {
+        /* Use hardware acceleration */
+        -webkit-transform: translate3d(0, -10px, 0);
+        transform: translate3d(0, -10px, 0);
+        
+        /* Smooth out animations */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        
+        /* Prevent flickering */
+        -webkit-perspective: 1000;
+        perspective: 1000;
+        
+        /* Use a different transition property for better performance */
+        -webkit-transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    }
+
+    .navbar__dropdown:hover .dropdown__menu,
+    .navbar__dropdown.active .dropdown__menu {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Mobile and iOS-specific adjustments */
+@media screen and (max-width: 960px) {
+    .navbar__dropdown {
+        width: 100%;
+    }
+
+    .dropdown__menu {
+        position: absolute; /* Change back to absolute positioning */
+        top: 100%; /* Position right below the navbar */
+        left: 0;
+        width: 100%;
+        max-height: 0; /* Start with no height */
+        overflow-y: auto; /* Allow scrolling if content exceeds max-height */
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+        transform: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar__dropdown.active .dropdown__menu {
+        max-height: calc(100vh - 80px); /* Adjust 80px to match your navbar height */
+        visibility: visible;
+        opacity: 1;
+    }
+
+    /* iOS-specific styles */
+    @supports (-webkit-touch-callout: none) {
+        .dropdown__menu {
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
     }
 }
 

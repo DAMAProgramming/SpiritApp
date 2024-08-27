@@ -45,29 +45,11 @@ body {
     display: flex;
     justify-content: space-between;
     height: 80px;
-    z-index: 10;
+    z-index: 1;
     width: 100%;
     max-width: 1300px;
     margin: 0 auto;
     padding: 0 50px;
-}
-
-#navbar__logo {
-    background-color: var(--primary-color);
-    background-image: linear-gradient(to top, var(--primary-color) 0%, #21d4fd 100%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 2rem;
-    font-weight: bold;
-    /* Add transition for smooth size change */
-    transition: font-size 0.3s ease;
 }
 
 .navbar__menu {
@@ -89,6 +71,73 @@ body {
     text-decoration: none;
     padding: 0 1rem;
     height: 100%;
+}
+
+.navbar__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+/* Dropdown styles */
+.navbar__dropdown {
+    position: relative;
+}
+
+.dropdown__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--navbar-bg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 4px 4px;
+    z-index: 1000;
+    min-width: 200px;
+    padding: 0;
+    list-style-type: none;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+}
+
+.navbar__dropdown:hover .dropdown__menu {
+    max-height: 300px;
+    opacity: 1;
+    padding: 10px 0;
+}
+
+.dropdown__link {
+    display: block;
+    padding: 12px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+}
+
+.dropdown__link:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#navbar__logo {
+    background-color: var(--primary-color);
+    background-image: linear-gradient(to top, var(--primary-color) 0%, #21d4fd 100%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    /* Add transition for smooth size change */
+    transition: font-size 0.3s ease;
 }
 
 .button {
@@ -487,5 +536,18 @@ button[type="submit"]:hover, .btn:hover {
 
     .dropdown__link {
         padding: 15px 30px;
+    }
+}
+
+/* Responsive design for navbar logo */
+@media screen and (max-width: 960px) {
+    #navbar__logo {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #navbar__logo {
+        font-size: 1.2rem;
     }
 }
