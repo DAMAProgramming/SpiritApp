@@ -64,6 +64,7 @@ body {
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     -moz-text-fill-color: transparent;
     display: flex;
@@ -184,7 +185,6 @@ body {
 
     .navbar__item {
         width: 100%;
-        padding: 10px 0; /* Add vertical padding to each item */
     }
 
     .navbar__links {
@@ -192,7 +192,28 @@ body {
         width: 100%;
         display: block; /* Change to block for full width */
         padding: 1rem;
+    }
+
+    /* New styles for login link in mobile view */
+    .navbar__btn {
+        width: 100%;
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+        background: transparent;
+        color: var(--text-color);
+        font-size: 1.6rem;
+        border: none;
         transition: all 0.3s ease;
+    }
+
+    .button:hover {
+        color: var(--primary-color);
+        background: transparent;
     }
 
     #mobile-menu {
@@ -205,19 +226,6 @@ body {
         height: 40px;
         width: 30px;
         margin-right: 10px; /* Add right margin to move button left */
-    }
-
-    .navbar__btn {
-        padding-bottom: 1rem;
-        width: auto; /* Allow the button to size based on content */
-        margin: 0 auto; /* Center the button */
-    }
-
-    .button {
-        display: inline-block; /* Change to inline-block */
-        width: auto; /* Allow the button to size based on content */
-        padding: 10px 20px;
-        font-size: 1rem;
     }
 
     #mobile-menu.is-active .toggle__line:nth-child(2) {
@@ -264,24 +272,18 @@ body {
     border-radius: 0 0 4px 4px;
     z-index: 5;
     min-width: 200px;
-    padding: 10px 0;
+    padding: 0;
     list-style-type: none;
     overflow: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    visibility: hidden;
+    max-height: 0;
     opacity: 0;
-    height: auto;
-    pointer-events: none;
-    transform: translateY(-10px);
-    will-change: transform, opacity, visibility;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
 }
 
-.navbar__dropdown:hover .dropdown__menu,
-.navbar__dropdown.active .dropdown__menu {
-    visibility: visible;
+.navbar__dropdown:hover .dropdown__menu {
+    max-height: 300px;
     opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
+    padding: 10px 0;
 }
 
 .dropdown__link {
@@ -289,121 +291,65 @@ body {
     padding: 12px 20px;
     color: var(--text-color);
     text-decoration: none;
-    transition: background-color 0.3s;
-    font-size: 1rem;
+    transition: background-color 0.3s, opacity 0.3s, transform 0.3s;
+    opacity: 0;
+    transform: translateY(-10px);
 }
+
+.navbar__dropdown:hover .dropdown__link {
+    opacity: 1; 
+    transform: translateY(0);
+}
+
+.navbar__menu:hover .dropdown__link:nth-child(1) { transition-delay: 0.05s; }
+.navbar__menu:hover .dropdown__link:nth-child(2) { transition-delay: 0.1s; }
+.navbar__menu:hover .dropdown__link:nth-child(3) { transition-delay: 0.15s; }
+.navbar__menu:hover .dropdown__link:nth-child(4) { transition-delay: 0.2s; }
 
 .dropdown__link:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.dropdown__menu .button {
-    display: block;
-    padding: 12px 20px;
-    color: var(--text-color);
-    text-decoration: none;
-    transition: background-color 0.3s;
-    font-size: 1rem;
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-}
-
-.dropdown__menu .button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-/* Ensure consistency in mobile view */
-@media screen and (max-width: 960px) {
-    .dropdown__menu .button {
-        padding: 15px 30px;
-    }
-}
-
 /* Mobile menu adjustments */
 @media screen and (max-width: 960px) {
-    .navbar__dropdown {
+    .navbar__menu {
+        display: grid;
+        grid-template-columns: auto;
+        margin: 0;
         width: 100%;
+        position: absolute;
+        top: -1000px;
+        opacity: 0;
+        transition: all 0.5s ease;
+        height: auto; /* Change to auto to accommodate content */
+        z-index: -1;
+        background: var(--navbar-bg);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px 0; /* Add some vertical padding */
+    }
+
+    .navbar__menu.active {
+        display: block;
+    }
+
+    .navbar__item {
+        width: 100%;
+    }
+
+    .navbar__links, .dropdown__link {
+        padding: 15px 30px;
     }
 
     .dropdown__menu {
         position: static;
-        width: 100%;
         box-shadow: none;
-        transform: none;
-        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
         max-height: 0;
-        padding: 0;
+        overflow: hidden;
     }
 
     .navbar__dropdown.active .dropdown__menu {
-        max-height: 1000px; /* Adjust based on your content */
+        max-height: 300px;
         padding: 10px 0;
-    }
-
-    .dropdown__link {
-        padding: 15px 30px;
-    }
-}
-
-/* Safari-specific optimizations */
-@supports (-webkit-touch-callout: none) {
-    .dropdown__menu {
-        /* Use hardware acceleration */
-        -webkit-transform: translate3d(0, -10px, 0);
-        transform: translate3d(0, -10px, 0);
-        
-        /* Smooth out animations */
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        
-        /* Prevent flickering */
-        -webkit-perspective: 1000;
-        perspective: 1000;
-        
-        /* Use a different transition property for better performance */
-        -webkit-transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
-        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    }
-
-    .navbar__dropdown:hover .dropdown__menu,
-    .navbar__dropdown.active .dropdown__menu {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-/* Mobile and iOS-specific adjustments */
-@media screen and (max-width: 960px) {
-    .navbar__dropdown {
-        width: 100%;
-    }
-
-    .dropdown__menu {
-        position: absolute; /* Change back to absolute positioning */
-        top: 100%; /* Position right below the navbar */
-        left: 0;
-        width: 100%;
-        max-height: 0; /* Start with no height */
-        overflow-y: auto; /* Allow scrolling if content exceeds max-height */
-        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
-        transform: none;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .navbar__dropdown.active .dropdown__menu {
-        max-height: calc(100vh - 80px); /* Adjust 80px to match your navbar height */
-        visibility: visible;
-        opacity: 1;
-    }
-
-    /* iOS-specific styles */
-    @supports (-webkit-touch-callout: none) {
-        .dropdown__menu {
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        }
     }
 }
 

@@ -8,6 +8,27 @@ let calendarInitialized = false;
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM fully loaded");
 
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navbarMenu = document.querySelector('.navbar__menu');
+    const dropdowns = document.querySelectorAll('.navbar__dropdown');
+
+    if (mobileMenu) {
+        mobileMenu.addEventListener('click', function() {
+            this.classList.toggle('is-active');
+            navbarMenu.classList.toggle('active');
+        });
+    }
+
+    dropdowns.forEach(dropdown => {
+        const link = dropdown.querySelector('.navbar__links');
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth <= 960) {
+                e.preventDefault();
+                this.parentNode.classList.toggle('active');
+            }
+        });
+    });
+
     // Mobile menu toggle functionality
     const menu = document.querySelector('#mobile-menu');
     const menuLinks = document.querySelector('.navbar__menu');
@@ -49,14 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadNewsTicker();
 
     // Initialize calendar and load events
-    initializeCalendar();
     loadEvents();
-
-    try {
-        initializeCalendar();
-    } catch (error) {
-        console.error("Error initializing calendar:", error);
-    }
 });
 
 function updateChart(pointsData) {

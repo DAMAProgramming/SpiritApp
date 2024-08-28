@@ -1,26 +1,41 @@
+// js/mainInteract.js
+
 document.addEventListener('DOMContentLoaded', function() {
-    const dropdowns = document.querySelectorAll('.navbar__dropdown');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navbarMenu = document.querySelector('.navbar__menu');
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    dropdowns.forEach(dropdown => {
-        const link = dropdown.querySelector('.navbar__links');
-        const menu = dropdown.querySelector('.dropdown__menu');
+    if (mobileMenu && navbarMenu) {
+        mobileMenu.addEventListener('click', function() {
+            this.classList.toggle('is-active');
+            navbarMenu.classList.toggle('active');
+        });
+    }
 
+    const dropdownLinks = document.querySelectorAll('.navbar__links[data-dropdown]');
+    
+    dropdownLinks.forEach(link => {
+        const dropdownId = link.getAttribute('data-dropdown');
+        const dropdown = document.getElementById(dropdownId);
+        
         if (isMobile) {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 
                 // Close all other dropdowns
-                dropdowns.forEach(d => {
-                    if (d !== dropdown) d.classList.remove('active');
+                dropdownLinks.forEach(otherLink => {
+                    if (otherLink !== link) {
+                        const otherId = otherLink.getAttribute('data-dropdown');
+                        document.getElementById(otherId).style.display = 'none';
+                    }
                 });
 
                 // Toggle current dropdown
-                dropdown.classList.toggle('active');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 
                 // Adjust scroll position if needed
-                if (dropdown.classList.contains('active')) {
-                    const dropdownBottom = menu.getBoundingClientRect().bottom;
+                if (dropdown.style.display === 'block') {
+                    const dropdownBottom = dropdown.getBoundingClientRect().bottom;
                     const windowHeight = window.innerHeight;
                     if (dropdownBottom > windowHeight) {
                         window.scrollTo({
@@ -31,16 +46,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         } else {
-            // Desktop behavior remains the same
-            dropdown.addEventListener('mouseenter', () => dropdown.classList.add('active'));
-            dropdown.addEventListener('mouseleave', () => dropdown.classList.remove('active'));
+            // Desktop behavior
+            link.addEventListener('mouseenter', () => {
+                dropdown.style.display = 'block';
+                setTimeout(() => dropdown.classList.add('active'), 10);
+            });
+            link.addEventListener('mouseleave', () => {
+                dropdown.classList.remove('active');
+                setTimeout(() => dropdown.style.display = 'none', 300);
+            });
         }
     });
 
     // Close dropdowns when tapping outside
     document.addEventListener('click', function(e) {
-        if (!e.target.closest('.navbar__dropdown')) {
-            dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        if (!e.target.closest('.navbar__links[data-dropdown]') && !e.target.closest('#mobile-menu')) {
+            dropdownLinks.forEach(link => {
+                const dropdownId = link.getAttribute('data-dropdown');
+                const dropdown = document.getElementById(dropdownId);
+                dropdown.style.display = 'none';
+                dropdown.classList.remove('active');
+            });
+            if (isMobile) {
+                navbarMenu.classList.remove('active');
+                mobileMenu.classList.remove('is-active');
+            }
         }
     });
 });

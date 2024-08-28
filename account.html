@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - SHHS Spirit Tracker</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/account.css">
+    <link rel="stylesheet" href="styles/background-text.css">
+</head>
+<body>
+    <div id="backgroundText" class="background-text"></div>
+
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="./index.html" id="navbar__logo"><img src="favicon.ico" width="40"> SHHS Spirit Tracker</a>
+
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+            </div>
+
+            <ul class="navbar__menu">
+                <li class="navbar__item">
+                    <a href="./index.html" class="navbar__links">Home</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./point-details.html" class="navbar__links">Points</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./games.html" class="navbar__links">Games</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./news.html" class="navbar__links">News</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./account.html" class="navbar__links">Account</a>
+                </li>
+                <li class="navbar__btn">
+                    <a href="./login.html" class="button" id="login-btn">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main account-page" role="main">
+        <div class="main__container">
+            <h1>Account Settings</h1>
+            <div class="account-info">
+                <h2>Account Information</h2>
+                <p>Email: <span id="user-email"></span></p>
+                <p>Admin Status: <span id="admin-status"></span></p>
+            </div>
+            <div class="account-actions">
+                <h2>Account Actions</h2>
+                <button id="change-password-btn" class="btn">Change Password</button>
+                <button id="logout-btn" class="btn">Logout</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__section">
+                <h4>About SHHS Spirit Tracker</h4>
+                <p>A student-made website, created by<br>Ethan Malabago and Hunter Dalley to<br>further celebrate our school spirit!</p>
+                <p>Feel free to contact us about<br>suggestions or bug reports!</p>
+            </div>
+            <div class="footer__section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./point-details.html">Spirit Points</a></li>
+                    <li><a href="./news.html">Latest News</a></li>
+                    <li><a href="./games.html">Game Library</a></li>
+                    <li><a href="./admin-dashboard.html">Admin Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="footer__section">
+                <h4>Contact</h4>
+                <p>Our combined Email: damaprogramming@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>SHHS Spirit Tracker - A student-made project for Sweet Home High School</p>
+        </div>
+    </footer>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/account.js"></script>
+    <script src="js/mainInteract.js"></script>
+    <script src="js/background-text.js"></script>
+</body>
+</html>

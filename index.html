@@ -12,21 +12,37 @@
     <div class="background-text" id="backgroundText"></div>
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="./index.html" id="navbar__logo">
-                <img src="favicon.ico" alt="SHHS Logo" width="40">
-                SHHS Spirit Tracker
-            </a>
+            <a href="./index.html" id="navbar__logo"><img src="favicon.ico" width="40"> SHHS Spirit Tracker</a>
+    
             <div class="navbar__toggle" id="mobile-menu">
                 <span class="toggle__line"></span>
                 <span class="toggle__line"></span>
                 <span class="toggle__line"></span>
             </div>
+    
             <ul class="navbar__menu">
-                <li class="navbar__item"><a href="./index.html" class="navbar__links">Home</a></li>
-                <li class="navbar__item"><a href="./point-details.html" class="navbar__links">Points</a></li>
-                <li class="navbar__item"><a href="./games.html" class="navbar__links">Games</a></li>
-                <li class="navbar__item"><a href="./news.html" class="navbar__links">News</a></li>
-                <li class="navbar__btn"><a href="./login.html" class="button dropdown__link">Login</a></li>
+                <li class="navbar__item">
+                    <a href="./index.html" class="navbar__links">Home</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./point-details.html" class="navbar__links">Points</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./games.html" class="navbar__links">Games</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./news.html" class="navbar__links">News</a>
+                </li>
+                <li class="navbar__item navbar__dropdown" id="account-dropdown" style="display: none;">
+                    <a href="#" class="navbar__links dropdown-toggle">Account</a>
+                    <ul class="dropdown__menu">
+                        <li><a href="./account.html" class="dropdown__link">Account Settings</a></li>
+                        <li><a href="#" class="dropdown__link" id="logout-link">Logout</a></li>
+                    </ul>
+                </li>
+                <li class="navbar__btn" id="login-btn-container">
+                    <a href="./login.html" class="button" id="login-btn">Login</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -108,7 +124,6 @@
                     <li><a href="./news.html">Latest News</a></li>
                     <li><a href="./games.html">Game Library</a></li>
                     <li><a href="./admin-dashboard.html">Admin Dashboard</a></li>
-                    <li><a href="https://github.com/DAMAProgramming/SpiritApp">Our Source Code</a></li>
                 </ul>
             </div>
             <div class="footer__section">
@@ -131,44 +146,9 @@
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="index.js"></script>
+    <script type="module" src="js/dynamic-nav.js"></script>
     <script src="js/background-text.js"></script>
     <script type="module" src="js/calendar.js"></script>
     <script src="js/mainInteract.js"></script>
-    <script src="js/dropdown-debug.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Dropdown diagnostic script loaded');
-        
-            const dropdowns = document.querySelectorAll('.navbar__dropdown');
-            
-            dropdowns.forEach((dropdown, index) => {
-                console.log(`Dropdown ${index}:`, dropdown);
-        
-                const link = dropdown.querySelector('.navbar__links');
-                const menu = dropdown.querySelector('.dropdown__menu');
-        
-                if (link && menu) {
-                    console.log(`Dropdown ${index} elements:`, { link, menu });
-        
-                    dropdown.addEventListener('mouseenter', () => {
-                        console.log(`Dropdown ${index} mouseenter`);
-                        menu.style.height = 'auto';
-                        menu.style.opacity = '1';
-                        menu.style.pointerEvents = 'auto';
-                        console.log(`Dropdown ${index} opened:`, menu.style.height);
-                    });
-        
-                    dropdown.addEventListener('mouseleave', () => {
-                        console.log(`Dropdown ${index} mouseleave`);
-                        menu.style.height = '0';
-                        menu.style.opacity = '0';
-                        menu.style.pointerEvents = 'none';
-                    });
-                } else {
-                    console.error(`Dropdown ${index} missing elements:`, { link, menu });
-                }
-            });
-        });
-        </script>
 </body>
 </html>
