@@ -13,21 +13,36 @@
 
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="./index.html" id="navbar__logo">
-                <img src="favicon.ico" width="40" alt="SHHS Logo"> SHHS Spirit Tracker
-            </a>
+            <a href="./index.html" id="navbar__logo"><img src="favicon.ico" width="40"> SHHS Spirit Tracker</a>
+    
             <div class="navbar__toggle" id="mobile-menu">
                 <span class="toggle__line"></span>
                 <span class="toggle__line"></span>
                 <span class="toggle__line"></span>
             </div>
+    
             <ul class="navbar__menu">
-                <li class="navbar__item"><a href="./index.html" class="navbar__links">Home</a></li>
-                <li class="navbar__item"><a href="./point-details.html" class="navbar__links">Points</a></li>
-                <li class="navbar__item"><a href="./games.html" class="navbar__links">Games</a></li>
-                <li class="navbar__item"><a href="./news.html" class="navbar__links">News</a></li>
-                <li class="navbar__btn">
-                    <a href="./login.html" class="button">Login</a>
+                <li class="navbar__item">
+                    <a href="./index.html" class="navbar__links">Home</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./point-details.html" class="navbar__links">Points</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./games.html" class="navbar__links">Games</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./news.html" class="navbar__links">News</a>
+                </li>
+                <li class="navbar__item navbar__dropdown" id="account-dropdown" style="display: none;">
+                    <a href="#" class="navbar__links dropdown-toggle">Account</a>
+                    <ul class="dropdown__menu">
+                        <li><a href="./account.html" class="dropdown__link">Account Settings</a></li>
+                        <li><a href="#" class="dropdown__link" id="logout-link">Logout</a></li>
+                    </ul>
+                </li>
+                <li class="navbar__btn" id="login-btn-container">
+                    <a href="./login.html" class="button" id="login-btn">Login</a>
                 </li>
             </ul>
         </div>
@@ -85,6 +100,7 @@
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/games.js"></script>
+    <script type="module" src="js/dynamic-nav.js"></script>
     <script src="js/background-text.js"></script>
     <script src="js/mainInteract.js"></script>
 </body>

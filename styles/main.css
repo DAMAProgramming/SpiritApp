@@ -31,7 +31,6 @@ body {
     position: relative;
 }
 
-/* Navbar styles remain the same */
 /* Navbar Styles */
 .navbar {
     background: var(--navbar-bg);
@@ -49,6 +48,7 @@ body {
 
 .navbar__container {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     height: 80px;
     z-index: 10;
@@ -64,17 +64,48 @@ body {
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;
-    background-clip: text;
     -webkit-text-fill-color: transparent;
     -moz-text-fill-color: transparent;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+    display: inline-flex;
+    align-items: flex-end;
     text-decoration: none;
     font-size: 2rem;
     font-weight: bold;
-    /* Add transition for smooth size change */
     transition: font-size 0.3s ease;
+    position: relative;
+    padding-right: 0.5em; /* Add some space for the version number */
+}
+
+#navbar__logo img {
+    margin-right: 0.5rem;
+    align-self: center;
+    position: relative;
+}
+
+.version-number {
+    font-size: 0.4em;
+    color: var(--text-color);
+    -webkit-text-fill-color: initial;
+    -moz-text-fill-color: initial;
+    position: absolute;
+    right: 0;
+    bottom: 0.2em;
+    transform: rotate(-5deg);
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+/* Adjust for mobile */
+@media screen and (max-width: 960px) {
+    #navbar__logo {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #navbar__logo {
+        font-size: 1.2rem;
+    }
 }
 
 .navbar__menu {
