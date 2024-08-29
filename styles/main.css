@@ -67,7 +67,7 @@ body {
     -webkit-text-fill-color: transparent;
     -moz-text-fill-color: transparent;
     display: inline-flex;
-    align-items: flex-end;
+    align-items: center;
     text-decoration: none;
     font-size: 2rem;
     font-weight: bold;
@@ -88,9 +88,9 @@ body {
     -webkit-text-fill-color: initial;
     -moz-text-fill-color: initial;
     position: absolute;
-    right: 0;
-    bottom: 0.2em;
-    transform: rotate(-5deg);
+    right: -0.5em;
+    bottom: 0.1em;
+    transform: rotate(-15deg);
     opacity: 0.7;
     white-space: nowrap;
 }
@@ -506,6 +506,7 @@ body {
 .bar.sophomore { background-color: #333333; }
 .bar.junior { background-color: #ffe81c; }
 .bar.senior { background-color: #4dc905; }
+.bar.staff { background-color: #868686; }
 
 /* News Styles */
 #news-container {

@@ -14,7 +14,11 @@
 
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="./index.html" id="navbar__logo"><img src="favicon.ico" width="40"> SHHS Spirit Tracker</a>
+            <a href="./index.html" id="navbar__logo">
+                <img src="favicon.ico" alt="SHHS Logo" width="40">
+                SHHS Spirit Tracker
+                <span class="version-number">v1.0 Beta</span>
+            </a>
     
             <div class="navbar__toggle" id="mobile-menu">
                 <span class="toggle__line"></span>
@@ -71,10 +75,12 @@
                 </div>
             </section>
 
-            <section class="content-section">
+            <div class="content-section">
                 <h3>Event History</h3>
-                <canvas id="event-history"></canvas>
-            </section>
+                <div class="chart-container line-chart">
+                    <canvas id="event-history"></canvas>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -89,11 +95,10 @@
                 <h4>Quick Links</h4>
                 <ul>
                     <li><a href="./index.html">Home</a></li>
-                    <li><a href="#points">Spirit Points</a></li>
-                    <li><a href="#news">Latest News</a></li>
-                    <li><a href="#upcoming-events">Upcoming Events</a></li>
+                    <li><a href="./point-details.html">Spirit Points</a></li>
+                    <li><a href="./news.html">Latest News</a></li>
+                    <li><a href="./games.html">Game Library</a></li>
                     <li><a href="./admin-dashboard.html">Admin Dashboard</a></li>
-                    <li><a href="https://github.com/DAMAProgramming/SpiritApp">Our Source Code</a></li>
                 </ul>
             </div>
             <div class="footer__section">
@@ -107,7 +112,6 @@
     </footer>
 
     <script type="module" src="js/firebase-config.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="js/point-details.js"></script>
     <script type="module" src="js/dynamic-nav.js"></script>
     <script src="js/mainInteract.js"></script>

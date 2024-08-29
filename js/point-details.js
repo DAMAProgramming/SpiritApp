@@ -1,9 +1,10 @@
-// Import necessary Firebase modules
+// js/point-details.js
+
 import { db } from './firebase-config.js';
 import { collection, getDocs, query, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 let eventsData = [];
-let lineChart;
+let lineChart = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     loadEvents();
@@ -61,7 +62,7 @@ async function updateCharts(selectedEventId) {
 }
 
 async function getChartData(selectedEventId) {
-    const classes = ['Freshmen', 'Sophomores', 'Juniors', 'Seniors'];
+    const classes = ['Freshmen', 'Sophomores', 'Juniors', 'Seniors', 'Staff'];
     const datasets = classes.map(className => ({
         label: className,
         data: [],
@@ -70,7 +71,7 @@ async function getChartData(selectedEventId) {
         tension: 0.1
     }));
 
-    let cumulativePoints = { Freshmen: 0, Sophomores: 0, Juniors: 0, Seniors: 0 };
+    let cumulativePoints = { Freshmen: 0, Sophomores: 0, Juniors: 0, Seniors: 0, Staff: 0 };
     const labels = [];
 
     for (const event of eventsData) {
@@ -154,35 +155,88 @@ function updateLineGraph(labels, datasets) {
     lineChart = new Chart(ctx, {
         type: 'line',
         data: { labels, datasets },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Cumulative Points' }
-                },
-                x: {
-                    title: { display: true, text: 'Events' }
-                }
-            },
-            plugins: {
-                title: { display: true, text: 'Cumulative Points Over Time' },
-                tooltip: { mode: 'index', intersect: false },
-                legend: { position: 'bottom' }
-            },
-            interaction: { mode: 'nearest', axis: 'x', intersect: false }
-        }
+        options: createChartOptions()
     });
 }
 
-function getClassColor(className) {
-    switch(className) {
-        case 'Freshmen': return '#f0f0f0';
-        case 'Sophomores': return '#333333';
-        case 'Juniors': return '#ffe81c';
-        case 'Seniors': return '#4dc905';
-        default: return '#000000';
-    }
+function createChartOptions() {
+    const fontSize = calculateFontSize();
+    const pointSize = calculatePointSize();
+
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Cumulative Points',
+                    font: { size: fontSize }
+                },
+                ticks: { font: { size: fontSize } }
+            },
+            x: {
+                display: true, // Show the x-axis
+                grid: {
+                    display: true, // Show vertical grid lines
+                    drawBorder: true, // Show the x-axis line
+                    drawTicks: false // Don't show the small tick marks
+                },
+                ticks: {
+                    display: false // Hide the x-axis labels
+                }
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Cumulative Points Over Time',
+                font: { size: fontSize + 2 }
+            },
+            legend: {
+                labels: { font: { size: fontSize } }
+            },
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+                titleFont: { size: fontSize },
+                bodyFont: { size: fontSize },
+                callbacks: {
+                    title: function(tooltipItems) {
+                        return tooltipItems[0].label; // This will show the event name
+                    }
+                }
+            }
+        },
+        elements: {
+            point: {
+                radius: pointSize,
+                hoverRadius: pointSize + 1
+            },
+            line: {
+                borderWidth: pointSize / 2
+            }
+        },
+        hover: {
+            mode: 'nearest',
+            intersect: true
+        }
+    };
+}
+
+function calculateFontSize() {
+    const baseSize = 14;
+    const minSize = 12;
+    const scaleFactor = Math.min(window.innerWidth / 1200, 1);
+    return Math.max(baseSize * scaleFactor, minSize);
+}
+
+function calculatePointSize() {
+    const baseSize = 5;
+    const minSize = 3;
+    const scaleFactor = Math.min(window.innerWidth / 1200, 1);
+    return Math.max(baseSize * scaleFactor, minSize);
 }
 
 function updateEventDetails(selectedEventId, pointsData) {
@@ -202,3 +256,21 @@ function updateEventDetails(selectedEventId, pointsData) {
         eventDetails.innerHTML = detailsHTML;
     }
 }
+
+function getClassColor(className) {
+    switch(className) {
+        case 'Freshmen': return '#D3D3D3';
+        case 'Sophomores': return '#333333';
+        case 'Juniors': return '#ffe81c';
+        case 'Seniors': return '#4dc905';
+        case 'Staff': return '#838383';
+        default: return '#000000';
+    }
+}
+
+window.addEventListener('resize', () => {
+    if (lineChart) {
+        lineChart.options = createChartOptions();
+        lineChart.update();
+    }
+});

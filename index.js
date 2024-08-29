@@ -83,7 +83,8 @@ function updateChart(pointsData) {
         "Freshmen": "freshman",
         "Sophomores": "sophomore",
         "Juniors": "junior",
-        "Seniors": "senior"
+        "Seniors": "senior",
+        "Staff": "staff"
     };
 
     for (const [className, points] of Object.entries(pointsData)) {

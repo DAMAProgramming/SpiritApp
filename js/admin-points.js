@@ -96,7 +96,7 @@ async function loadEvents() {
         });
 
         console.log('Events loaded successfully');
-        updateLineGraph();
+        updateLineGraph(); // Call this after loading events
     } catch (error) {
         console.error('Error loading events:', error);
         alert('Failed to load events. Please try again.');
@@ -140,6 +140,10 @@ async function handleEventSelection() {
                     <div class="class-points">
                         <label>Seniors:</label>
                         <input type="number" class="points-input" data-class="Seniors" min="0">
+                    </div>
+                    <div class="class-points">
+                        <label>Staff:</label>
+                        <input type="number" class="points-input" data-class="Staff" min="0">
                     </div>
                 </div>
             `;
@@ -191,7 +195,8 @@ async function handlePointsUpdate() {
             Freshmen: 0,
             Sophomores: 0,
             Juniors: 0,
-            Seniors: 0
+            Seniors: 0,
+            Staff: 0
         };
 
         // Fetch existing event points
@@ -226,7 +231,8 @@ async function handlePointsUpdate() {
             Freshmen: 0,
             Sophomores: 0,
             Juniors: 0,
-            Seniors: 0
+            Seniors: 0,
+            Staff: 0
         };
 
         // Calculate new total points
@@ -291,9 +297,16 @@ async function updateChart() {
 
 async function updateLineGraph() {
     console.log('Updating line graph');
+    const canvas = document.getElementById('event-history');
+    if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
+        console.error("Canvas element 'event-history' not found or is not a canvas");
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    
     try {
         const { labels, datasets } = await getChartData();
-        const ctx = document.getElementById('event-history').getContext('2d');
         
         if (lineChart) {
             lineChart.destroy();
@@ -302,33 +315,74 @@ async function updateLineGraph() {
         lineChart = new Chart(ctx, {
             type: 'line',
             data: { labels, datasets },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Cumulative Points' }
-                    },
-                    x: {
-                        title: { display: true, text: 'Events' }
-                    }
-                },
-                plugins: {
-                    title: { display: true, text: 'Cumulative Points Over Time' },
-                    tooltip: { mode: 'index', intersect: false },
-                    legend: { position: 'bottom' }
-                },
-                interaction: { mode: 'nearest', axis: 'x', intersect: false }
-            }
+            options: createChartOptions()
         });
     } catch (error) {
         console.error('Error updating line graph:', error);
     }
 }
 
+function createChartOptions() {
+    const fontSize = calculateFontSize();
+    const pointSize = calculatePointSize();
+
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Cumulative Points',
+                    font: { size: fontSize }
+                },
+                ticks: { font: { size: fontSize } }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Events',
+                    font: { size: fontSize }
+                },
+                ticks: {
+                    font: { size: fontSize },
+                    maxRotation: 45,
+                    minRotation: 45
+                }
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Cumulative Points Over Time',
+                font: { size: fontSize + 2 }
+            },
+            legend: {
+                labels: { font: { size: fontSize } }
+            },
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+                titleFont: { size: fontSize },
+                bodyFont: { size: fontSize }
+            }
+        },
+        elements: {
+            point: {
+                radius: pointSize,
+                hoverRadius: pointSize + 2
+            },
+            line: {
+                borderWidth: 2
+            }
+        }
+    };
+}
+
 async function getChartData() {
     console.log('Getting chart data');
-    const classes = ['Freshmen', 'Sophomores', 'Juniors', 'Seniors'];
+    const classes = ['Freshmen', 'Sophomores', 'Juniors', 'Seniors', 'Staff'];
     const datasets = classes.map(className => ({
         label: className,
         data: [],
@@ -337,7 +391,7 @@ async function getChartData() {
         tension: 0.1
     }));
 
-    let cumulativePoints = { Freshmen: 0, Sophomores: 0, Juniors: 0, Seniors: 0 };
+    let cumulativePoints = { Freshmen: 0, Sophomores: 0, Juniors: 0, Seniors: 0, Staff: 0 };
     const labels = [];
 
     for (const event of eventsData) {
@@ -361,12 +415,27 @@ async function getChartData() {
     return { labels, datasets };
 }
 
+function calculateFontSize() {
+    const baseSize = 12;
+    const minSize = 8;
+    const scaleFactor = Math.min(window.innerWidth / 1200, 1);
+    return Math.max(baseSize * scaleFactor, minSize);
+}
+
+function calculatePointSize() {
+    const baseSize = 3;
+    const minSize = 1;
+    const scaleFactor = Math.min(window.innerWidth / 1200, 1);
+    return Math.max(baseSize * scaleFactor, minSize);
+}
+
 function getClassColor(className) {
     switch(className) {
-        case 'Freshmen': return '#f0f0f0';
-        case 'Sophomores': return '#333333';
+        case 'Freshmen': return '#D3D3D3';
+        case 'Sophomores': return '#000000';
         case 'Juniors': return '#ffe81c';
         case 'Seniors': return '#4dc905';
+        case 'Staff': return '#868686';
         default: return '#000000';
     }
 }

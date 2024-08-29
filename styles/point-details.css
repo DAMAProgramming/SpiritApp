@@ -1,13 +1,25 @@
 .chart-container {
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto 30px;
+    margin-bottom: 20px;
+}
+
+.chart-container.bar-chart {
+    height: 300px; /* Adjust as needed */
+}
+
+.chart-container.line-chart {
+    height: 400px; /* Adjust as needed */
+}
+
+.chart-container .chart {
+    height: 100%;
 }
 
 .chart {
     display: flex;
     justify-content: space-around;
     align-items: stretch;
+    min-height: 200px;
     height: 300px;
     width: 100%;
 }
@@ -24,18 +36,21 @@
     display: flex;
     align-items: flex-end;
     width: 100%;
+    min-height: 150px;
 }
 
 .bar {
     width: 100%;
     transition: height 0.5s ease-in-out;
     position: relative;
+    min-height: 5px;
 }
 
 .bar.freshmen { background-color: #f0f0f0; }
 .bar.sophomores { background-color: #333333; }
 .bar.juniors { background-color: #ffe81c; }
 .bar.seniors { background-color: #4dc905; }
+.bar.staff { background-color: #838383; }
 
 .points-display {
     position: absolute;
@@ -64,6 +79,13 @@
 
 #event-history {
     margin-top: 20px;
+    min-height: 200px;
+}
+
+@media screen and (max-width: 768px) {
+    #event-history {
+        height: 600px; /* Fixed height for mobile */
+    }
 }
 
 table {
