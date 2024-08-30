@@ -94,7 +94,7 @@ async function loadGames() {
             const game = doc.data();
             const li = document.createElement('li');
             li.innerHTML = `
-                ${game.name} - ${game.description}
+                ${game.name} - ${truncateText(game.description, 100)}
                 ${game.videoUrl ? '<span class="video-indicator">(Has Video)</span>' : ''}
                 ${game.youtubeVideoId ? '<span class="youtube-indicator">(YouTube)</span>' : ''}
                 <button class="delete-btn" data-id="${doc.id}" data-type="game">Delete</button>
@@ -149,6 +149,11 @@ async function handleDelete(e) {
             alert(`Error deleting ${type}. Please try again.`);
         }
     }
+}
+
+function truncateText(text, maxLength) {
+    if (text.length <= maxLength) return text;
+    return text.substr(0, maxLength) + '...';
 }
 
 // Function to handle logout

@@ -89,6 +89,7 @@ function showGamePopup(game) {
 
     title.textContent = game.name;
     description.textContent = game.description;
+    description.style.whiteSpace = 'pre-wrap';  // Preserve whitespace
     
     // Clear previous video content
     videoContainer.innerHTML = '';
