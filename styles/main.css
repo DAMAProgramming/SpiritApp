@@ -481,6 +481,11 @@ body {
     font-size: 12px;
     text-align: center;
     color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px; /* Adjust this value as needed */
+    transform-origin: center top;
 }
 
 .points-display {
@@ -507,6 +512,24 @@ body {
 .bar.junior { background-color: #ffe81c; }
 .bar.senior { background-color: #4dc905; }
 .bar.staff { background-color: #868686; }
+
+@media screen and (max-width: 768px) {
+    .bar-label {
+        font-size: 10px;
+        margin-top: 15px;
+        max-width: 40px;
+    }
+
+    .chart {
+        margin-bottom: 40px; /* Add some margin at the bottom to accommodate rotated labels */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .bar-label {
+        font-size: 8px;
+    }
+}
 
 /* News Styles */
 #news-container {

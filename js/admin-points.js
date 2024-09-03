@@ -1,5 +1,5 @@
 import { db, auth } from './firebase-config.js';
-import { collection, getDocs, query, orderBy, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { collection, getDocs, query, orderBy, doc, getDoc, setDoc, updateDoc, increment, addDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 import { serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
@@ -323,7 +323,25 @@ async function updateLineGraph() {
         lineChart = new Chart(ctx, {
             type: 'line',
             data: { labels, datasets },
-            options: createChartOptions()
+            options: {
+                ...createChartOptions(),
+                scales: {
+                    x: {
+                        type: 'category',
+                        title: {
+                            display: true,
+                            text: 'Events'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Cumulative Points'
+                        }
+                    }
+                }
+            }
         });
     } catch (error) {
         console.error('Error updating line graph:', error);
@@ -400,27 +418,55 @@ async function getChartData() {
     }));
 
     let cumulativePoints = { Freshmen: 0, Sophomores: 0, Juniors: 0, Seniors: 0, Staff: 0 };
-    const labels = [];
+    const allEvents = [];
 
+    // Get regular event points
     for (const event of eventsData) {
         const eventPointsDoc = await getDoc(doc(db, 'eventPoints', event.id));
         const eventPoints = eventPointsDoc.exists() ? eventPointsDoc.data() : {};
         
+        let eventDate = new Date(event.date);
+        let eventTotalPoints = {};
+
         for (const className in cumulativePoints) {
-            let eventTotalPoints = 0;
+            eventTotalPoints[className] = 0;
             for (const gameId in eventPoints) {
-                eventTotalPoints += eventPoints[gameId][className] || 0;
+                eventTotalPoints[className] += eventPoints[gameId][className] || 0;
             }
-            cumulativePoints[className] += eventTotalPoints;
         }
 
-        labels.push(event.name);
-        classes.forEach((className, index) => {
-            datasets[index].data.push(cumulativePoints[className]);
+        allEvents.push({ date: eventDate, points: eventTotalPoints, name: event.name });
+    }
+
+    // Get additional points
+    const additionalPointsDoc = await getDoc(doc(db, 'eventPoints', 'additionalPoints'));
+    const additionalPoints = additionalPointsDoc.exists() ? additionalPointsDoc.data() : {};
+
+    for (const dateString in additionalPoints) {
+        const date = new Date(dateString);
+        allEvents.push({ 
+            date: date, 
+            points: additionalPoints[dateString],
+            name: 'Additional Points'
         });
     }
 
-    return { labels, datasets };
+    // Sort all events by date
+    allEvents.sort((a, b) => a.date - b.date);
+
+    // Calculate cumulative points and create dataset
+    allEvents.forEach((event, index) => {
+        for (const className in cumulativePoints) {
+            cumulativePoints[className] += event.points[className] || 0;
+            datasets[classes.indexOf(className)].data.push({
+                x: event.date.getTime(),
+                y: cumulativePoints[className]
+            });
+        }
+    });
+
+    console.log('Chart data:', { allEvents, datasets });
+    return { labels: allEvents.map(e => e.name), datasets };
 }
 
 function calculateFontSize() {
@@ -528,14 +574,16 @@ function handleLogout(e) {
 async function handleAdditionalPoints() {
     console.log('Adding additional points');
     const classSelect = document.getElementById('class-select');
+    const dateInput = document.getElementById('points-date');
     const pointsInput = document.getElementById('points-input');
     const reasonInput = document.getElementById('reason-input');
 
     const selectedClass = classSelect.value;
+    const date = dateInput.value;
     const points = parseInt(pointsInput.value);
     const reason = reasonInput.value.trim();
 
-    if (!selectedClass || isNaN(points) || points <= 0 || !reason) {
+    if (!selectedClass || !date || isNaN(points) || points <= 0 || !reason) {
         alert('Please fill in all fields correctly.');
         return;
     }
@@ -553,8 +601,17 @@ async function handleAdditionalPoints() {
             class: selectedClass,
             points: points,
             reason: reason,
+            date: new Date(date), // Convert string to Date object
             timestamp: serverTimestamp()
         });
+
+        // Update event points for line chart
+        const eventPointsRef = doc(db, 'eventPoints', 'additionalPoints');
+        await setDoc(eventPointsRef, {
+            [date]: {
+                [selectedClass]: increment(points)
+            }
+        }, { merge: true });
 
         console.log('Additional points added successfully');
         alert('Additional points added successfully!');
@@ -564,6 +621,7 @@ async function handleAdditionalPoints() {
         // Clear input fields
         pointsInput.value = '';
         reasonInput.value = '';
+        dateInput.value = '';
     } catch (error) {
         console.error('Error adding additional points:', error);
         alert('Failed to add additional points. Please try again.');
