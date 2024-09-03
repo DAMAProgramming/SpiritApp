@@ -91,6 +91,28 @@
                     <option value="">Choose an event</option>
                 </select>
             </div>
+            <div class="additional-points-section">
+                <h3>Add Additional Points</h3>
+                <div class="form-group">
+                  <label for="class-select">Select Class:</label>
+                  <select id="class-select">
+                    <option value="Freshmen">Freshmen</option>
+                    <option value="Sophomores">Sophomores</option>
+                    <option value="Juniors">Juniors</option>
+                    <option value="Seniors">Seniors</option>
+                    <option value="Staff">Staff</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="points-input">Points Earned:</label>
+                  <input type="number" id="points-input" min="0">
+                </div>
+                <div class="form-group">
+                  <label for="reason-input">Reason:</label>
+                  <textarea id="reason-input" rows="3"></textarea>
+                </div>
+                <button id="add-additional-points-btn" class="btn">Add Points</button>
+              </div>
             <div id="games-list" class="games-list"></div>
             <button id="update-points-btn" class="btn">Update Points</button>
         </div>

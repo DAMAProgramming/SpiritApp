@@ -1,6 +1,7 @@
 import { db, auth } from './firebase-config.js';
 import { collection, getDocs, query, orderBy, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 let eventsData = [];
 let lineChart;
@@ -53,6 +54,7 @@ function setupEventListeners() {
     const eventSelect = document.getElementById('event-select');
     const updatePointsBtn = document.getElementById('update-points-btn');
     const logoutBtn = document.getElementById('logout-btn');
+    const addAdditionalPointsBtn = document.getElementById('add-additional-points-btn');
 
     if (eventSelect) {
         eventSelect.addEventListener('change', handleEventSelection);
@@ -64,6 +66,12 @@ function setupEventListeners() {
         updatePointsBtn.addEventListener('click', handlePointsUpdate);
     } else {
         console.error('Update points button not found');
+    }
+
+    if (addAdditionalPointsBtn) {
+        addAdditionalPointsBtn.addEventListener('click', handleAdditionalPoints);
+    } else {
+        console.error('Add additional points button not found');
     }
 
     if (logoutBtn) {
@@ -517,11 +525,57 @@ function handleLogout(e) {
     });
 }
 
+async function handleAdditionalPoints() {
+    console.log('Adding additional points');
+    const classSelect = document.getElementById('class-select');
+    const pointsInput = document.getElementById('points-input');
+    const reasonInput = document.getElementById('reason-input');
+
+    const selectedClass = classSelect.value;
+    const points = parseInt(pointsInput.value);
+    const reason = reasonInput.value.trim();
+
+    if (!selectedClass || isNaN(points) || points <= 0 || !reason) {
+        alert('Please fill in all fields correctly.');
+        return;
+    }
+
+    try {
+        // Update total points
+        const totalPointsRef = doc(db, 'spiritPoints', 'classes');
+        await updateDoc(totalPointsRef, {
+            [selectedClass]: increment(points)
+        });
+
+        // Log the additional points
+        const additionalPointsRef = collection(db, 'additionalPoints');
+        await addDoc(additionalPointsRef, {
+            class: selectedClass,
+            points: points,
+            reason: reason,
+            timestamp: serverTimestamp()
+        });
+
+        console.log('Additional points added successfully');
+        alert('Additional points added successfully!');
+        updateChart();
+        updateLineGraph();
+
+        // Clear input fields
+        pointsInput.value = '';
+        reasonInput.value = '';
+    } catch (error) {
+        console.error('Error adding additional points:', error);
+        alert('Failed to add additional points. Please try again.');
+    }
+}
+
 // Export functions that need to be accessed from other files
 export { 
     loadEvents, 
     handleEventSelection, 
     handlePointsUpdate, 
     updateChart, 
-    updateLineGraph
+    updateLineGraph,
+    handleAdditionalPoints
 };
