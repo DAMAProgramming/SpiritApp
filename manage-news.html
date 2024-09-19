@@ -38,7 +38,6 @@
         </div>
     </nav>
 
-
     <div class="main" role="main">
         <div class="main__container">
             <div class="section content-section">
@@ -50,7 +49,8 @@
                     </div>
                     <div class="form-group">
                         <label for="news-content">Content:</label>
-                        <textarea id="news-content" required></textarea>
+                        <div id="news-content" contenteditable="true"></div>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
                     </div>
                     <button type="submit">Post News</button>
                 </form>
