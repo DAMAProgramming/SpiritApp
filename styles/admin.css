@@ -301,3 +301,13 @@ input[type="file"] {
     border: 1px solid var(--border-color);
     border-radius: 4px;
 }
+
+.news-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+}
+
+.tox-tinymce {
+    margin-bottom: 20px;
+}
