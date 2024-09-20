@@ -1,0 +1,177 @@
+/* calendar.css */
+
+#calendar-container {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+#calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#calendar-header button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.calendar-day:hover:not(.day-name):not(.other-month) {
+    background-color: #e0e0e0;
+}
+
+.calendar-day.event {
+    background-color: #df8612;
+    color: white;
+}
+
+.calendar-day.other-month {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.calendar-day.day-name {
+    background-color: #333;
+    color: white;
+    font-weight: normal;
+    cursor: default;
+}
+
+.event-popup {
+    display: flex;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0);
+    transition: background-color 0.3s ease;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.event-popup.active {
+    background-color: rgba(0,0,0,0.5);
+    pointer-events: auto;
+}
+
+.event-popup-content {
+    background-color: #fefefe;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    position: relative;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.event-popup.active .event-popup-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.close-popup {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.close-popup:hover,
+.close-popup:focus {
+    color: #000;
+}
+
+#event-title {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+#event-games h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #444;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.event-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.game-item {
+    background-color: #ffffff;
+    border: 1px solid #eee;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+.view-all-games-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #e67f09;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.view-all-games-btn:hover {
+    background-color: #e67f09;
+}
+
+/* Add a subtle hover effect for days with events */
+.calendar-day.event {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendar-day.event:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
