@@ -28,7 +28,7 @@
     border-radius: 4px;
 }
 
-button[type="submit"] {
+.btn {
     background-color: var(--primary-color);
     color: white;
     padding: 10px 20px;
@@ -36,9 +36,10 @@ button[type="submit"] {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover {
+.btn:hover {
     background-color: #178f00;
 }
 
@@ -52,6 +53,7 @@ button[type="submit"]:hover {
     border-radius: 4px;
     padding: 15px;
     margin-bottom: 15px;
+    position: relative;
 }
 
 .sport-game-item h3 {
@@ -71,9 +73,23 @@ button[type="submit"]:hover {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: background-color 0.3s ease;
 }
 
 .delete-btn:hover {
     background-color: #c82333;
+}
+
+@media screen and (max-width: 768px) {
+    .sport-game-item {
+        padding-top: 40px;
+    }
+
+    .delete-btn {
+        top: 5px;
+        right: 5px;
+    }
 }

@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports - SHHS Spirit Tracker</title>
+    <title>Sports Calendar - SHHS Spirit Tracker</title>
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/background-text.css">
-    <link rel="stylesheet" href="styles/calendar.css">
     <link rel="stylesheet" href="styles/sports.css">
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="styles/background-text.css">
+    <script src="js/background-text.js"></script>
 </head>
 <body>
     <div class="background-text" id="backgroundText"></div>
@@ -56,36 +55,16 @@
     <main class="main sports-calendar-page" role="main">
         <div class="main__container">
             <h1>Sports Calendar</h1>
-            <div id="calendar2"></div>
+            <div id="calendar-container">
+                <div id="calendar-header">
+                    <button id="prev-month">&lt;</button>
+                    <h2 id="current-month-year"></h2>
+                    <button id="next-month">&gt;</button>
+                </div>
+                <div id="calendar"></div>
+            </div>
         </div>
     </main>
-
-    <footer class="footer">
-        <div class="footer__container">
-            <div class="footer__section">
-                <h4>About SHHS Spirit Tracker</h4>
-                <p>A student-made website, created by<br>Ethan Malabago and Hunter Dalley to<br>further celebrate our school spirit!</p>
-                <p>Feel free to contact us about<br>suggestions or bug reports!</p>
-            </div>
-            <div class="footer__section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="./index.html">Home</a></li>
-                    <li><a href="./point-details.html">Spirit Points</a></li>
-                    <li><a href="./news.html">Latest News</a></li>
-                    <li><a href="./games.html">Game Library</a></li>
-                    <li><a href="./admin-dashboard.html">Admin Dashboard</a></li>
-                </ul>
-            </div>
-            <div class="footer__section">
-                <h4>Contact</h4>
-                <p>Our combined Email: damaprogramming@gmail.com</p>
-            </div>
-        </div>
-        <div class="footer__bottom">
-            <p>SHHS Spirit Tracker - A student-made project for Sweet Home High School</p>
-        </div>
-    </footer>
 
     <div id="event-popup" class="event-popup">
         <div class="event-popup-content">
@@ -95,11 +74,37 @@
         </div>
     </div>
 
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js'></script>
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__section footer__section--about">
+                <h4>About SHHS Spirit Tracker</h4>
+                <p>A student-made website, created by<br>
+                Ethan Malabago and Hunter Dalley to<br>
+                further celebrate our school spirit!</p>
+                <p>Feel free to contact us about<br>
+                suggestions or bug reports!</p>
+            </div>
+            <div class="footer__section footer__section--links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./point-details.html">Spirit Points</a></li>
+                    <li><a href="./news.html">Latest News</a></li>
+                    <li><a href="./games.html">Game Library</a></li>
+                    <li><a href="./sports.html">Sports Calendar</a></li>
+                </ul>
+            </div>
+            <div class="footer__section footer__section--contact">
+                <h4>Contact</h4>
+                <p>Our combined Email: damaprogramming@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>&copy; 2024 SHHS Spirit Tracker - A student-made project for Sweet Home High School</p>
+        </div>
+    </footer>
+
     <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="js/dynamic-nav.js"></script>
-    <script src="js/background-text.js"></script>
-    <script src="js/mainInteract.js"></script>
     <script type="module" src="js/sports.js"></script>
 </body>
 </html>

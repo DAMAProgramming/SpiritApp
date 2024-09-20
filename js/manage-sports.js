@@ -2,45 +2,56 @@
 
 import { db, auth } from './firebase-config.js';
 import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded');
     const addSportGameForm = document.getElementById('add-sport-game-form');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // Initialize date picker
-    flatpickr("#game-date", {
-        dateFormat: "Y-m-d",
-    });
+    if (addSportGameForm) {
+        addSportGameForm.addEventListener('submit', handleAddSportGame);
+    } else {
+        console.error('Add sport game form not found');
+    }
 
-    // Initialize time picker
-    flatpickr("#game-time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
-    });
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    } else {
+        console.error('Logout button not found');
+    }
 
-    addSportGameForm.addEventListener('submit', handleAddSportGame);
-    logoutBtn.addEventListener('click', handleLogout);
-
+    // Immediately attempt to load games
     loadSportGames();
+
+    // Also check authentication state
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log('User is authenticated');
+            loadSportGames();
+        } else {
+            console.log('User is not authenticated, redirecting to login');
+            window.location.href = './login.html';
+        }
+    });
 });
 
 async function handleAddSportGame(e) {
     e.preventDefault();
+    console.log('Handling add sport game');
     const gameName = document.getElementById('game-name').value;
     const gameDate = document.getElementById('game-date').value;
     const gameTime = document.getElementById('game-time').value;
     const gameLocation = document.getElementById('game-location').value;
 
     try {
-        await addDoc(collection(db, 'sports_games'), {
+        const docRef = await addDoc(collection(db, 'sports_games'), {
             name: gameName,
-            date: new Date(`${gameDate} ${gameTime}`),
+            date: new Date(`${gameDate}T${gameTime}`),
             location: gameLocation,
             createdAt: new Date()
         });
-
+        console.log('Sport game added with ID: ', docRef.id);
         alert('Sport game added successfully!');
         document.getElementById('add-sport-game-form').reset();
         loadSportGames();
@@ -51,13 +62,26 @@ async function handleAddSportGame(e) {
 }
 
 async function loadSportGames() {
+    console.log('Loading sport games');
     const sportGamesList = document.getElementById('sport-games-list');
+    
+    if (!sportGamesList) {
+        console.error('Sport games list element not found');
+        return;
+    }
     
     try {
         const gamesQuery = query(collection(db, 'sports_games'), orderBy('date', 'asc'));
         const snapshot = await getDocs(gamesQuery);
         
+        console.log('Fetched games:', snapshot.size);
+        
         sportGamesList.innerHTML = '';
+        
+        if (snapshot.empty) {
+            sportGamesList.innerHTML = '<p>No sport games found.</p>';
+            return;
+        }
         
         snapshot.forEach(doc => {
             const game = doc.data();
@@ -78,18 +102,22 @@ async function loadSportGames() {
         sportGamesList.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', handleDelete);
         });
+        
+        console.log('Sport games loaded successfully');
     } catch (error) {
         console.error('Error loading sport games:', error);
-        alert('Error loading sport games. Please try again.');
+        sportGamesList.innerHTML = '<p>Error loading sport games. Please try again.</p>';
     }
 }
 
 async function handleDelete(e) {
     const id = e.target.getAttribute('data-id');
+    console.log('Attempting to delete game with ID:', id);
     
     if (confirm('Are you sure you want to delete this sport game?')) {
         try {
             await deleteDoc(doc(db, 'sports_games', id));
+            console.log('Sport game deleted successfully');
             alert('Sport game deleted successfully!');
             loadSportGames();
         } catch (error) {
@@ -101,6 +129,7 @@ async function handleDelete(e) {
 
 function handleLogout(e) {
     e.preventDefault();
+    console.log('Logging out');
     signOut(auth).then(() => {
         console.log('User signed out successfully');
         window.location.href = './login.html';

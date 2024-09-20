@@ -1,3 +1,5 @@
+/* styles/sports.css */
+
 .sports-calendar-page .main__container {
     max-width: 1000px;
     margin: 0 auto;
@@ -11,7 +13,7 @@
     font-size: 2.5rem;
 }
 
-#calendar2 {
+#calendar-container {
     background-color: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -19,89 +21,146 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* FullCalendar Customizations */
-.fc-theme-standard .fc-toolbar {
-    margin-bottom: 1.5em;
+#calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.fc-theme-standard .fc-toolbar h2 {
+#calendar-header button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+
+#current-month-year {
     font-size: 1.5rem;
     color: var(--primary-color);
 }
 
-.fc-theme-standard .fc-button-primary {
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.calendar-day:hover:not(.day-name):not(.other-month) {
+    background-color: #e0e0e0;
+}
+
+.calendar-day.event {
     background-color: var(--primary-color);
-    border-color: var(--primary-color);
+    color: white;
 }
 
-.fc-theme-standard .fc-button-primary:hover {
-    background-color: #178f00;
-    border-color: #178f00;
+.calendar-day.other-month {
+    opacity: 0.5;
+    cursor: default;
 }
 
-.fc-theme-standard .fc-button-primary:not(:disabled).fc-button-active,
-.fc-theme-standard .fc-button-primary:not(:disabled):active {
-    background-color: #ffc107;
-    border-color: #ffc107;
-    color: #000000;
+.calendar-day.day-name {
+    background-color: var(--secondary-color);
+    color: white;
+    font-weight: normal;
+    cursor: default;
 }
 
-.fc-theme-standard .fc-day-today {
-    background-color: rgba(30, 180, 0, 0.1) !important;
+.event-popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
 }
 
-.fc-theme-standard .fc-event {
-    background-color: #ffc107;
-    border-color: #ffc107;
-    color: #000000;
+.event-popup.active {
+    display: flex;
 }
 
-.fc-theme-standard .fc-event:hover {
-    background-color: #e0a800;
-    border-color: #e0a800;
+.event-popup-content {
+    background-color: #fefefe;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
-.fc-theme-standard .fc-col-header-cell {
-    background-color: var(--primary-color);
-    color: #ffffff;
+.close-popup {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    position: absolute;
+    top: 10px;
+    right: 20px;
 }
 
-.fc-theme-standard .fc-daygrid-day-number {
-    color: var(--text-color);
+.close-popup:hover,
+.close-popup:focus {
+    color: #000;
 }
 
-/* Primary Colors of Buttons */
-.fc .fc-button-primary {
-    --fc-button-text-color: #fff;
-    --fc-button-bg-color: forestgreen;
-    --fc-button-border-color: rgb(26, 105, 26);
-    --fc-button-hover-bg-color: gold;
-    --fc-button-hover-border-color: rgb(252, 185, 0);
-    --fc-button-active-bg-color: gold;
-    --fc-button-active-border-color: #c2880a;
-    transition: all 0.3s ease;
+#event-title {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    font-size: 24px;
 }
 
-/* Active Group Button Color */
-.fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
-    color: #fff;
-    color: var(--fc-button-text-color, #fff);
-    /* background-color: #1a252f; */
-    background-color: #1b2f1a;
-    /* border-color: #151e27; */
-    border-color: #172715;
+.event-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 
-@media (max-width: 768px) {
+.event-item h4 {
+    margin-top: 0;
+    color: var(--secondary-color);
+}
+
+@media screen and (max-width: 768px) {
     .sports-calendar-page .main__container {
         padding: 20px 10px;
     }
 
-    .fc-theme-standard .fc-toolbar {
+    #calendar-header {
         flex-direction: column;
+        align-items: center;
     }
 
-    .fc-theme-standard .fc-toolbar-chunk {
-        margin-bottom: 10px;
+    #current-month-year {
+        margin: 10px 0;
+    }
+
+    .event-popup-content {
+        width: 95%;
+        padding: 20px;
     }
 }
