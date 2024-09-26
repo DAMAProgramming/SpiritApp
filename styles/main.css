@@ -710,11 +710,12 @@ button[type="submit"]:hover, .btn:hover {
 
 /* Footer Styles */
 .footer {
-    background-color: #f8f9fa;
+    background-color: rgba(248, 248, 248, 0.8);
     color: #333;
     padding: 40px 0 20px;
     font-size: 14px;
     border-top: 1px solid var(--border-color);
+    position: relative;
     z-index: 2;
 }
 
