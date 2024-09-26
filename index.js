@@ -86,6 +86,7 @@ function updateChart(pointsData) {
         "Seniors": "senior",
         "Staff": "staff"
     };
+    
 
     for (const [className, points] of Object.entries(pointsData)) {
         const cssClass = classMap[className] || className.toLowerCase();
@@ -126,6 +127,7 @@ function updateChart(pointsData) {
         }
     }
 }
+
 
 async function loadNewsTicker() {
     const tickerContent = document.getElementById('ticker-content');
@@ -284,3 +286,4 @@ function createNewsElement(news) {
     `;
     return div;
 }
+

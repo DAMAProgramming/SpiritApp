@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHHS Spirit Tracker - Manage News</title>
+    <title>Manage News - SHHS Spirit Tracker</title>
     <link rel="stylesheet" href="styles/admin.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/background-text.css">
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 </head>
 <body>
     <div class="background-text" id="backgroundText"></div>
@@ -41,9 +38,9 @@
         </div>
     </nav>
 
-    <main class="main">
+    <div class="main" role="main">
         <div class="main__container">
-            <section class="content-section">
+            <div class="section content-section">
                 <h2>Manage News</h2>
                 <form id="news-form">
                     <div class="form-group">
@@ -52,21 +49,19 @@
                     </div>
                     <div class="form-group">
                         <label for="news-content">Content:</label>
-                        <textarea id="news-content" rows="4" required></textarea>
+                        <div id="news-content" contenteditable="true"></div>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
                     </div>
-                    <div class="form-group">
-                        <label for="news-image">Image (optional):</label>
-                        <input type="file" id="news-image" accept="image/*">
-                    </div>
-                    <button type="submit" class="btn">Post News</button>
+                    <button type="submit">Post News</button>
                 </form>
-            </section>
-            <section class="content-section">
+            </div>
+
+            <div class="section content-section">
                 <h2>Recent News</h2>
                 <div id="news-list"></div>
-            </section>
+            </div>
         </div>
-    </main>
+    </div>
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module">
@@ -79,6 +74,8 @@
                 window.location.href = '/SpiritApp/login.html';
             });
     </script>
+    <script src="https://cdn.tiny.cloud/1/3skjyydum867d9qovg9u7m4muhugl93n7wq7l7dfz9dlis84/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/manage-news.js"></script>
     <script src="js/mainInteract.js"></script>
     <script src="js/background-text.js"></script>

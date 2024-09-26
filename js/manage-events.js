@@ -200,6 +200,45 @@ async function handleDelete(e) {
     }
 }
 
+async function deleteEventPoints(eventId) {
+    // Get the event points
+    const eventPointsDoc = await getDoc(doc(db, 'eventPoints', eventId));
+    if (eventPointsDoc.exists()) {
+        const eventPoints = eventPointsDoc.data();
+        
+        // Update total points
+        const totalPointsRef = doc(db, 'spiritPoints', 'classes');
+        const totalPointsDoc = await getDoc(totalPointsRef);
+        const currentTotalPoints = totalPointsDoc.data();
+        
+        const updatedTotalPoints = {};
+        for (const className in currentTotalPoints) {
+            updatedTotalPoints[className] = currentTotalPoints[className] - (eventPoints[className] || 0);
+        }
+        
+        // Update the total points
+        await updateDoc(totalPointsRef, updatedTotalPoints);
+        
+        // Delete the event points document
+        await deleteDoc(doc(db, 'eventPoints', eventId));
+    }
+}
+
+function updateAllCharts() {
+    // Update charts on the current page
+    if (typeof updateCharts === 'function') {
+        updateCharts('all');
+    }
+
+    // Update charts on other pages
+    if (typeof updateIndexChart === 'function') {
+        updateIndexChart();
+    }
+    if (typeof updateManagePointsChart === 'function') {
+        updateManagePointsChart();
+    }
+}
+
 // Function to handle logout
 function handleLogout(e) {
     e.preventDefault();

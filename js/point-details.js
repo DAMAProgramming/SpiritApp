@@ -74,16 +74,37 @@ async function getChartData(selectedEventId) {
     let cumulativePoints = { Freshmen: 0, Sophomores: 0, Juniors: 0, Seniors: 0, Staff: 0 };
     const labels = [];
 
-    for (const event of eventsData) {
-        const eventPointsDoc = await getDoc(doc(db, 'eventPoints', event.id));
-        const eventPoints = eventPointsDoc.exists() ? eventPointsDoc.data() : {};
-        
-        for (const className in cumulativePoints) {
-            let eventTotalPoints = 0;
-            for (const gameId in eventPoints) {
-                eventTotalPoints += eventPoints[gameId][className] || 0;
+    const additionalPointsDoc = await getDoc(doc(db, 'eventPoints', 'additionalPoints'));
+    const additionalPoints = additionalPointsDoc.exists() ? additionalPointsDoc.data() : {};
+
+    const allEvents = [...eventsData];
+    for (const [dateString, points] of Object.entries(additionalPoints)) {
+        allEvents.push({
+            id: 'additional-' + dateString,
+            name: 'Additional Points',
+            date: new Date(dateString),
+            isAdditional: true,
+            points: points
+        });
+    }
+    allEvents.sort((a, b) => a.date - b.date);
+
+    for (const event of allEvents) {
+        if (event.isAdditional) {
+            for (const className in cumulativePoints) {
+                cumulativePoints[className] += event.points[className] || 0;
             }
-            cumulativePoints[className] += eventTotalPoints;
+        } else {
+            const eventPointsDoc = await getDoc(doc(db, 'eventPoints', event.id));
+            const eventPoints = eventPointsDoc.exists() ? eventPointsDoc.data() : {};
+            
+            for (const className in cumulativePoints) {
+                let eventTotalPoints = 0;
+                for (const gameId in eventPoints) {
+                    eventTotalPoints += eventPoints[gameId][className] || 0;
+                }
+                cumulativePoints[className] += eventTotalPoints;
+            }
         }
 
         labels.push(event.name);
@@ -274,3 +295,4 @@ window.addEventListener('resize', () => {
         lineChart.update();
     }
 });
+window.updateCharts = updateCharts;

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Sports - SHHS Spirit Tracker</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/manage-sports.css">
+    <link rel="stylesheet" href="styles/background-text.css">
+</head>
+<body>
+    <div id="backgroundText" class="background-text"></div>
+
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="./index.html" id="navbar__logo">
+                <img src="favicon.ico" alt="SHHS Logo" width="40">
+                SHHS Spirit Tracker
+                <span class="version-number">v1.0 Beta</span>
+            </a>
+    
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+            </div>
+    
+            <ul class="navbar__menu">
+                <li class="navbar__item">
+                    <a href="./index.html" class="navbar__links">Home</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./point-details.html" class="navbar__links">Points</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./games.html" class="navbar__links">Games</a>
+                </li>
+                <li class="navbar__item">
+                    <a href="./news.html" class="navbar__links">News</a>
+                </li>
+                <li class="navbar__item navbar__dropdown" id="account-dropdown" style="display: none;">
+                    <a href="#" class="navbar__links dropdown-toggle">Account</a>
+                    <ul class="dropdown__menu">
+                        <li><a href="./account.html" class="dropdown__link">Account Settings</a></li>
+                        <li><a href="#" class="dropdown__link" id="logout-link">Logout</a></li>
+                    </ul>
+                </li>
+                <li class="navbar__btn" id="login-btn-container">
+                    <a href="./login.html" class="button" id="login-btn">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main manage-sports" role="main">
+        <div class="main__container">
+            <section class="section content-section">
+                <h2>Add Sport Game</h2>
+                <form id="add-sport-game-form">
+                    <div class="form-group">
+                        <label for="game-name">Game Name:</label>
+                        <input type="text" id="game-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="game-date">Date:</label>
+                        <input type="date" id="game-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="game-time">Time:</label>
+                        <input type="time" id="game-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="game-location">Location:</label>
+                        <input type="text" id="game-location" required>
+                    </div>
+                    <button type="submit" class="btn">Add Sport Game</button>
+                </form>
+            </section>
+
+            <section class="section content-section">
+                <h2>Existing Sport Games</h2>
+                <div id="sport-games-list"></div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__section footer__section--about">
+                <h4>About SHHS Spirit Tracker</h4>
+                <p>A student-made website, created by<br>
+                Ethan Malabago and Hunter Dalley to<br>
+                further celebrate our school spirit!</p>
+                <p>Feel free to contact us about<br>
+                suggestions or bug reports!</p>
+            </div>
+            <div class="footer__section footer__section--links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./point-details.html">Spirit Points</a></li>
+                    <li><a href="./news.html">Latest News</a></li>
+                    <li><a href="./games.html">Game Library</a></li>
+                    <li><a href="./sports.html">Sports Calendar</a></li>
+                </ul>
+            </div>
+            <div class="footer__section footer__section--contact">
+                <h4>Contact</h4>
+                <p>Our combined Email: damaprogramming@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>&copy; 2024 SHHS Spirit Tracker - A student-made project for Sweet Home High School</p>
+        </div>
+    </footer>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/manage-sports.js"></script>
+    <script src="js/background-text.js"></script>
+</body>
+</html>

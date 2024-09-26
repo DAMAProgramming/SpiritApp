@@ -74,6 +74,17 @@
     color: #178f00;
 }
 
+/* Styles for the popup */
+.news-popup__content img {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+}
+
+.news-popup__content iframe {
+    max-width: 100%;
+}
+
 /* Responsive design */
 @media screen and (max-width: 768px) {
     .news-grid {

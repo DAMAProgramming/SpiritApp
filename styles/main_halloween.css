@@ -1,0 +1,805 @@
+/* Refined Main CSS with Light Theme and Fixes */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+:root {
+    --background-color: rgba(37, 37, 37); /* Semi-transparent white */
+    --text-color: #cccccc;
+    --primary-color: #000000;
+    --secondary-color: #7a0871;
+    --accent-color: #ee6e05;
+    --border-color: #202122;
+    --navbar-bg: rgba(41, 41, 41, 0.9); /* Semi-transparent white for navbar */
+    --button-text: #000000;
+    --bg-text-color: #272727;
+    --footer-bg: rgba(36, 36, 36,); /* Semi-transparent light gray for footer */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Navbar Styles */
+.navbar {
+    background: var(--navbar-bg);
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    position: relative;  /* Add this to create a new stacking context */
+    z-index: 10;  /* Ensure navbar is above other elements */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    z-index: 10;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 50px;
+}
+
+#navbar__logo {
+    background-color: var(--primary-color);
+    background-image: linear-gradient(to top, black 0%, orangered 50%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    transition: font-size 0.3s ease;
+    position: relative;
+    padding-right: 0.5em; /* Add some space for the version number */
+}
+
+#navbar__logo img {
+    margin-right: 0.5rem;
+    align-self: center;
+    position: relative;
+}
+
+.version-number {
+    font-size: 0.4em;
+    color: var(--text-color);
+    -webkit-text-fill-color: initial;
+    -moz-text-fill-color: initial;
+    position: absolute;
+    right: -0.5em;
+    bottom: 0.1em;
+    transform: rotate(-15deg);
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+/* Adjust for mobile */
+@media screen and (max-width: 960px) {
+    #navbar__logo {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #navbar__logo {
+        font-size: 1.2rem;
+    }
+}
+
+.navbar__menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+}
+
+.navbar__item {
+    height: 80px;
+}
+
+.navbar__links {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+}
+
+.navbar__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    height: 100%;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    background: var(--accent-color);
+    color: var(--button-text);
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    background: #7a0871;
+    transition: all 0.3s ease;
+}
+
+.navbar__links:hover {
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 960px) {
+    /* Mobile menu styles */
+    .navbar__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* Center items vertically */
+        height: 80px;
+        z-index: 2;
+        width: 100%;
+        max-width: 1300px;
+        padding: 0 20px 0 20px;
+    }
+
+    .navbar__menu {
+        display: grid;
+        grid-template-columns: auto;
+        margin: 0;
+        width: 100%;
+        position: absolute;
+        top: -1000px;
+        opacity: 0;
+        transition: all 0.5s ease;
+        height: auto; /* Change to auto to accommodate content */
+        z-index: -1;
+        background: var(--navbar-bg);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px 0; /* Add some vertical padding */
+    }
+
+    .navbar__menu.active {
+        top: 80px; /* Position right below the navbar */
+        opacity: 1;
+        transition: all 0.5s ease;
+        z-index: 99;
+        height: auto;
+        font-size: 1.6rem;
+    }
+
+    #navbar__logo {
+        padding-left: 0; /* Remove left padding */
+        font-size: 1.5rem;
+    }
+
+    .navbar__toggle .toggle__line {
+        width: 25px;
+        height: 3px;
+        margin: 3px auto;
+        transition: all 0.3s ease-in-out;
+        background: var(--text-color);
+    }
+
+    .navbar__item {
+        width: 100%;
+    }
+
+    .navbar__links {
+        text-align: center;
+        width: 100%;
+        display: block; /* Change to block for full width */
+        padding: 1rem;
+    }
+
+    /* New styles for login link in mobile view */
+    .navbar__btn {
+        width: 100%;
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+        background: transparent;
+        color: var(--text-color);
+        font-size: 1.6rem;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .button:hover {
+        color: var(--primary-color);
+        background: transparent;
+    }
+
+    #mobile-menu {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        height: 40px;
+        width: 30px;
+        margin-right: 10px; /* Add right margin to move button left */
+    }
+
+    #mobile-menu.is-active .toggle__line:nth-child(2) {
+        opacity: 0;
+    }
+
+    #mobile-menu.is-active .toggle__line:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+
+    #mobile-menu.is-active .toggle__line:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #navbar__logo {
+        /* Further reduce font size for very small screens */
+        font-size: 1.2rem;
+    }
+
+    /* Adjust padding to give more space to the logo */
+    .navbar__container {
+        padding: 0 10px;
+    }
+
+    /* Reduce the size of the toggle button */
+    #mobile-menu {
+        transform: scale(0.8);
+    }
+}
+
+/* Dropdown styles */
+.navbar__dropdown {
+    position: relative;
+}
+
+.dropdown__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--navbar-bg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 4px 4px;
+    z-index: 5;
+    min-width: 200px;
+    padding: 0;
+    list-style-type: none;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+}
+
+.navbar__dropdown:hover .dropdown__menu {
+    max-height: 300px;
+    opacity: 1;
+    padding: 10px 0;
+}
+
+.dropdown__link {
+    display: block;
+    padding: 12px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s, opacity 0.3s, transform 0.3s;
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.navbar__dropdown:hover .dropdown__link {
+    opacity: 1; 
+    transform: translateY(0);
+}
+
+.navbar__menu:hover .dropdown__link:nth-child(1) { transition-delay: 0.05s; }
+.navbar__menu:hover .dropdown__link:nth-child(2) { transition-delay: 0.1s; }
+.navbar__menu:hover .dropdown__link:nth-child(3) { transition-delay: 0.15s; }
+.navbar__menu:hover .dropdown__link:nth-child(4) { transition-delay: 0.2s; }
+
+.dropdown__link:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile menu adjustments */
+@media screen and (max-width: 960px) {
+    .navbar__menu {
+        display: grid;
+        grid-template-columns: auto;
+        margin: 0;
+        width: 100%;
+        position: absolute;
+        top: -1000px;
+        opacity: 0;
+        transition: all 0.5s ease;
+        height: auto; /* Change to auto to accommodate content */
+        z-index: -1;
+        background: var(--navbar-bg);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px 0; /* Add some vertical padding */
+    }
+
+    .navbar__menu.active {
+        display: block;
+    }
+
+    .navbar__item {
+        width: 100%;
+    }
+
+    .navbar__links, .dropdown__link {
+        padding: 15px 30px;
+    }
+
+    .dropdown__menu {
+        position: static;
+        box-shadow: none;
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    .navbar__dropdown.active .dropdown__menu {
+        max-height: 300px;
+        padding: 10px 0;
+    }
+}
+
+/* Main Content Styles */
+.main {
+    position: relative;
+    z-index: 1;
+}
+
+.main__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 90vh;
+    padding: 50px 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.content-section {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 40px;
+    background-color: #181818;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.content-section h2 {
+    color: var(--text-color);
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Spirit Points Chart Styles */
+.chart-container {
+    width: 100%;
+    background-color: #e0840c;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-container h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: var(--text-color);
+}
+
+.chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    height: 300px;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.bar {
+    width: 60px;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    transition: height 0.5s ease-in-out;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Add a subtle border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.bar:hover {
+    opacity: 0.8;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+}
+
+.bar-wrapper {
+    display: flex;
+    align-items: flex-end; /* Align bars at the bottom */
+    height: 100%;
+    width: 100%;
+    padding-top: 20px; /* Add padding at the top */
+    box-sizing: border-box; /* Ensure padding is included in height calculation */
+}
+
+.bar-label {
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px; /* Adjust this value as needed */
+    transform-origin: center top;
+}
+
+.points-display {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.class-name-display {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.bar.freshman { background-color: #f0f0f0; }
+.bar.sophomore { background-color: #333333; }
+.bar.junior { background-color: #ffe81c; }
+.bar.senior { background-color: #4dc905; }
+.bar.staff { background-color: #868686; }
+
+@media screen and (max-width: 768px) {
+    .bar-label {
+        font-size: 10px;
+        margin-top: 15px;
+        max-width: 40px;
+    }
+
+    .chart {
+        margin-bottom: 40px; /* Add some margin at the bottom to accommodate rotated labels */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .bar-label {
+        font-size: 8px;
+    }
+}
+
+/* News Styles */
+#news-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.news-item {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.news-item h3 {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.news-item p {
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.news-item small {
+    color: #666;
+    font-style: italic;
+}
+
+/* Event Styles */
+#events-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.event-item {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.event-item h3 {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.event-item p {
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.event-item small {
+    color: #666;
+    font-style: italic;
+}
+
+/* Form Styles */
+input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+}
+
+button[type="submit"], .btn {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+button[type="submit"]:hover, .btn:hover {
+    background-color: #178f00;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .main__container {
+        padding: 20px;
+    }
+
+    .content-section {
+        padding: 20px;
+    }
+
+    .chart {
+        height: 200px;
+    }
+    
+    .bar {
+        width: 40px;
+    }
+
+    .bar::after {
+        font-size: 10px;
+        bottom: -25px;
+    }
+
+    .bar-container {
+        width: 40px;
+    }
+}
+
+.news-item img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+/* ... (existing CSS) ... */
+
+/* News Ticker Styles */
+.news-ticker-container {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.news-ticker-label {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.news-ticker {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.news-ticker ul {
+    display: inline-flex; /* Changed from flex to inline-flex */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    /* Removed animation property */
+}
+
+.news-ticker li {
+    white-space: nowrap;
+    padding: 10px;
+    margin-right: 50px;
+}
+
+/* Responsive design for news ticker */
+@media screen and (max-width: 768px) {
+    .news-ticker-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .news-ticker-label {
+        text-align: center;
+    }
+}
+
+/* Footer Styles */
+.footer {
+    background-color: rgba(36, 36, 36, 0.9);
+    position: relative;
+    padding: 40px 0 20px;
+    font-size: 14px;
+    border-top: 1px solid var(--border-color);
+    z-index: 20;
+}
+
+.footer__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+.footer__section {
+    flex: 0 1 auto; /* Changed from flex: 1 to allow sections to have different widths */
+    margin-bottom: 20px;
+    padding-right: 30px; /* Reduced padding from 40px to 30px */
+}
+
+.footer__section:last-child {
+    padding-right: 0;
+}
+
+/* New styles for specific sections */
+.footer__section--about {
+    flex-basis: 40%; /* Takes up 40% of the container width */
+}
+
+.footer__section--links {
+    flex-basis: 20%; /* Takes up 20% of the container width */
+}
+
+.footer__section--contact {
+    flex-basis: 30%; /* Takes up 30% of the container width */
+}
+
+.footer__section h4 {
+    color: #ff4800;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.footer__section p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.footer__section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer__section ul li {
+    margin-bottom: 8px;
+}
+
+.footer__section a {
+    color: #e0e0e0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer__section a:hover {
+    color: orange;
+}
+
+.footer__bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive design for footer */
+@media screen and (max-width: 768px) {
+    .footer__container {
+        flex-direction: column;
+    }
+
+    .footer__section,
+    .footer__section--about,
+    .footer__section--links,
+    .footer__section--contact {
+        width: 100%;
+        flex-basis: 100%;
+        margin-bottom: 30px;
+        padding-right: 0;
+    }
+}

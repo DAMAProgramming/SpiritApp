@@ -1,24 +1,9 @@
-/* styles/sports.css */
-
-.sports-calendar-page .main__container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-.sports-calendar-page h1 {
-    text-align: center;
-    color: var(--primary-color);
-    margin-bottom: 40px;
-    font-size: 2.5rem;
-}
+/* calendar.css */
 
 #calendar-container {
-    background-color: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
 }
 
 #calendar-header {
@@ -33,12 +18,6 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: var(--primary-color);
-}
-
-#current-month-year {
-    font-size: 1.5rem;
-    color: var(--primary-color);
 }
 
 #calendar {
@@ -64,7 +43,7 @@
 }
 
 .calendar-day.event {
-    background-color: var(--primary-color);
+    background-color: #df8612;
     color: white;
 }
 
@@ -74,27 +53,30 @@
 }
 
 .calendar-day.day-name {
-    background-color: var(--secondary-color);
+    background-color: #333;
     color: white;
     font-weight: normal;
     cursor: default;
 }
 
 .event-popup {
-    display: none;
+    display: flex;
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0);
+    transition: background-color 0.3s ease;
     justify-content: center;
     align-items: center;
+    pointer-events: none;
 }
 
 .event-popup.active {
-    display: flex;
+    background-color: rgba(0,0,0,0.5);
+    pointer-events: auto;
 }
 
 .event-popup-content {
@@ -105,8 +87,16 @@
     max-width: 600px;
     border-radius: 10px;
     position: relative;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s ease;
     max-height: 80vh;
     overflow-y: auto;
+}
+
+.event-popup.active .event-popup-content {
+    transform: scale(1);
+    opacity: 1;
 }
 
 .close-popup {
@@ -128,8 +118,17 @@
 
 #event-title {
     margin-bottom: 20px;
-    color: var(--primary-color);
+    color: #333;
     font-size: 24px;
+}
+
+#event-games h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #444;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
 }
 
 .event-item {
@@ -140,27 +139,39 @@
     border-radius: 5px;
 }
 
-.event-item h4 {
-    margin-top: 0;
-    color: var(--secondary-color);
+.game-item {
+    background-color: #ffffff;
+    border: 1px solid #eee;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 3px;
 }
 
-@media screen and (max-width: 768px) {
-    .sports-calendar-page .main__container {
-        padding: 20px 10px;
-    }
+.view-all-games-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #e67f09;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    font-weight: bold;
+}
 
-    #calendar-header {
-        flex-direction: column;
-        align-items: center;
-    }
+.view-all-games-btn:hover {
+    background-color: #e67f09;
+}
 
-    #current-month-year {
-        margin: 10px 0;
-    }
+/* Add a subtle hover effect for days with events */
+.calendar-day.event {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-    .event-popup-content {
-        width: 95%;
-        padding: 20px;
-    }
+.calendar-day.event:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }

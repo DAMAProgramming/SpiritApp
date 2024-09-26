@@ -1,5 +1,4 @@
 // news.js
-
 import { db } from './firebase-config.js';
 import { collection, query, orderBy, limit, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
@@ -32,11 +31,21 @@ function createNewsElement(news) {
     const article = document.createElement('article');
     article.className = 'news-card';
     
+    // Extract the first image from the content, if any
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = news.content;
+    const firstImage = tempDiv.querySelector('img');
+    const firstImageSrc = firstImage ? firstImage.src : null;
+    
+    // Remove all images from the content for excerpt
+    tempDiv.querySelectorAll('img').forEach(img => img.remove());
+    const textContent = tempDiv.textContent || tempDiv.innerText;
+    
     const content = `
-        ${news.imageUrl ? `<img src="${news.imageUrl}" alt="${news.title}" class="news-card__image">` : ''}
+        ${firstImageSrc ? `<img src="${firstImageSrc}" alt="News image" class="news-card__image">` : ''}
         <div class="news-card__content">
             <h2 class="news-card__title">${news.title}</h2>
-            <p class="news-card__excerpt">${truncateText(news.content, 100)}</p>
+            <div class="news-card__excerpt">${truncateText(textContent, 100)}</div>
             <p class="news-card__date">${formatDate(news.date.toDate())}</p>
             <button class="news-card__link" data-news-id="${news.id}">Read more</button>
         </div>
@@ -48,7 +57,7 @@ function createNewsElement(news) {
 
 function truncateText(text, maxLength) {
     if (text.length <= maxLength) return text;
-    return text.substr(0, maxLength) + '...';
+    return text.substr(0, maxLength).trim() + '...';
 }
 
 function formatDate(date) {
@@ -110,23 +119,21 @@ async function getNewsById(id) {
 function showPopup(news) {
     const popup = document.getElementById('news-popup');
     const title = document.getElementById('popup-title');
-    const image = document.getElementById('popup-image');
     const content = document.getElementById('popup-content');
     const date = document.getElementById('popup-date');
 
     title.textContent = news.title;
-    content.textContent = news.content;
+    content.innerHTML = news.content; // This will include all images and formatting
     date.textContent = formatDate(news.date.toDate());
 
-    if (news.imageUrl) {
-        image.src = news.imageUrl;
-        image.style.display = 'block';
-    } else {
-        image.style.display = 'none';
-    }
+    // Ensure all images in the popup are responsive
+    content.querySelectorAll('img').forEach(img => {
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
+    });
 
     popup.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
+    document.body.style.overflow = 'hidden';
 }
 
 function closePopup() {
